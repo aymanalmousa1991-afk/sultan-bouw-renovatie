@@ -1,0 +1,27 @@
+---
+import {
+  PaintRoller, Grid3x3, Droplets, Hammer, DoorOpen,
+  Bath, CookingPot, Layers, Wrench, Drill, House, PaintBucket,
+} from '@lucide/astro';
+import type { ServiceIcon } from '../data/site';
+
+interface Props { name: ServiceIcon; class?: string }
+const { name, class: className = 'size-6' } = Astro.props;
+
+const icons = {
+  paint: PaintRoller,
+  tiles: Grid3x3,
+  plumbing: Droplets,
+  plaster: PaintBucket,
+  carpentry: Hammer,
+  door: DoorOpen,
+  bath: Bath,
+  kitchen: CookingPot,
+  floor: Layers,
+  repair: Wrench,
+  tools: Drill,
+  house: House,
+};
+const Icon = icons[name];
+---
+<Icon class={className} stroke-width={1.6} aria-hidden="true" />

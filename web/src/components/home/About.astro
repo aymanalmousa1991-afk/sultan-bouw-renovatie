@@ -1,0 +1,61 @@
+---
+import { Check, ArrowRight } from '@lucide/astro';
+import { Picture } from 'astro:assets';
+import { company } from '../../data/site';
+import ownerPhoto from '../../assets/eigenaar.jpg';
+
+const ownerName = company.owner;
+
+const values = [
+  'Eén vast aanspreekpunt, van offerte tot oplevering',
+  'Heldere prijs vooraf, geen verrassingen',
+  'Elke dag een schone, opgeruimde werkplek',
+  'Netjes, op tijd en met respect voor uw huis',
+];
+---
+<section id="over" class="relative py-24 md:py-36">
+  <div class="container-x grid grid-cols-1 items-center gap-16 lg:grid-cols-12">
+    <div class="relative lg:col-span-5">
+      <div data-clip-reveal class="relative aspect-[4/5] overflow-hidden rounded-[2rem] bg-sand">
+        <div data-parallax="8" class="absolute inset-x-0 -top-[6%] h-[112%]">
+          <Picture
+            src={ownerPhoto}
+            formats={['avif', 'webp']}
+            widths={[400, 640, 900]}
+            sizes="(min-width: 1024px) 38vw, 90vw"
+            alt={`${ownerName || 'De eigenaar'} van ${company.name}, in bedrijfskleding met gereedschapsriem`}
+            pictureAttributes={{ class: 'block h-full w-full [&>img]:h-full [&>img]:w-full [&>img]:object-cover [&>img]:object-top' }}
+          />
+        </div>
+      </div>
+      <div class="absolute -bottom-6 right-6 rounded-2xl bg-night px-6 py-5 text-bone shadow-xl md:-right-6">
+        <p class="font-display text-xl font-semibold">{ownerName || 'Uw vaste aanspreekpunt'}</p>
+        <p class="text-sm text-bone/70">Eigenaar · {company.name}</p>
+      </div>
+    </div>
+
+    <div class="lg:col-span-6 lg:col-start-7">
+      <p class="eyebrow" data-reveal>Over ons</p>
+      <h2 data-split class="mt-5 text-[clamp(2.2rem,4.6vw,4rem)] font-bold">
+        Geen groot bedrijf. Wél grote betrokkenheid.
+      </h2>
+      <div data-reveal class="mt-8 space-y-5 text-lg text-muted">
+        <p>
+          {company.name} is een vakbedrijf uit {company.city} met meer dan {company.yearsExperience} jaar ervaring in renovatie en afwerking. U spreekt altijd direct met de eigenaar — degene die ook verantwoordelijk is voor het eindresultaat.
+        </p>
+        <p>
+          Of het nu gaat om één wand of een complete woning: we werken zorgvuldig, communiceren duidelijk en leveren pas op als u tevreden bent.
+        </p>
+      </div>
+      <ul class="mt-10 grid gap-4 sm:grid-cols-2">
+        {values.map((v) => (
+          <li data-reveal class="flex gap-3">
+            <span class="mt-0.5 grid size-6 shrink-0 place-items-center rounded-full bg-gold/15 text-gold-deep"><Check class="size-4" stroke-width={2.5} aria-hidden="true" /></span>
+            <span class="font-medium">{v}</span>
+          </li>
+        ))}
+      </ul>
+      <a data-reveal href="/contact/" class="btn btn-dark mt-12">Maak kennis <ArrowRight class="size-4" aria-hidden="true" /></a>
+    </div>
+  </div>
+</section>

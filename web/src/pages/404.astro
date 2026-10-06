@@ -1,0 +1,15 @@
+---
+import { ArrowLeft } from '@lucide/astro';
+import Base from '../layouts/Base.astro';
+---
+<Base title="Pagina niet gevonden" darkTop>
+  <section class="on-dark grain relative isolate grid min-h-[100svh] place-items-center overflow-hidden bg-night px-4 text-center text-bone">
+    <div class="blueprint-grid absolute inset-0 -z-10" aria-hidden="true"></div>
+    <div>
+      <p class="font-display text-[clamp(7rem,24vw,16rem)] font-extrabold leading-none tracking-tighter text-gold-light" data-reveal>404</p>
+      <h1 data-split="load" class="mt-4 text-[clamp(2rem,4vw,3.5rem)] font-bold">Deze pagina is nog in aanbouw.</h1>
+      <p data-reveal class="mx-auto mt-4 max-w-md text-lg text-bone/70">Of hij bestaat niet. Gelukkig staat de rest van ons huis stevig.</p>
+      <a data-reveal href="/" class="btn btn-primary mt-10"><ArrowLeft class="size-4" aria-hidden="true" /> Terug naar home</a>
+    </div>
+  </section>
+</Base>

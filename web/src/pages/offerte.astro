@@ -1,0 +1,412 @@
+---
+import { ArrowLeft, ArrowRight, Check, ImagePlus, Phone, MessageCircle, Mail, Clock, BadgeCheck, Home } from '@lucide/astro';
+import Base from '../layouts/Base.astro';
+import ServiceIcon from '../components/ServiceIcon.astro';
+import Honeypot from '../components/Honeypot.astro';
+import { services, company } from '../data/site';
+
+const steps = ['Dienst', 'Project', "Foto's", 'Gegevens'];
+const propertyTypes = ['Appartement', 'Tussenwoning', 'Hoekwoning / 2-onder-1-kap', 'Vrijstaande woning', 'Bedrijfspand'];
+const startPeriods = ['Zo snel mogelijk', 'Binnen 1 maand', 'Over 1 – 3 maanden', 'Over meer dan 3 maanden', 'Weet ik nog niet'];
+---
+<Base title="Gratis offerte aanvragen" description={`Vraag vrijblijvend een offerte aan bij ${company.name}. Binnen 24 uur reactie en een gratis opname op locatie.`}>
+  <section class="relative pb-24 pt-32 md:pt-40">
+    <div class="container-x grid gap-12 lg:grid-cols-12">
+      <!-- Zijkolom -->
+      <aside class="lg:col-span-4">
+        <div class="lg:sticky lg:top-28">
+          <p class="eyebrow" data-reveal>Gratis &amp; vrijblijvend</p>
+          <h1 data-split="load" class="mt-5 text-[clamp(2.4rem,5vw,4rem)] font-bold">Vraag uw offerte aan.</h1>
+          <p data-reveal class="mt-5 text-lg text-muted">In vier korte stappen. We reageren binnen 24 uur en komen gratis bij u langs.</p>
+
+          <ol data-reveal class="mt-10 hidden space-y-1 lg:block" aria-hidden="true">
+            {steps.map((s, i) => (
+              <li data-step-indicator={i} class="step-ind flex items-center gap-4 rounded-2xl px-4 py-3 transition-colors duration-500">
+                <span class="step-dot grid size-9 place-items-center rounded-full border-2 border-ink/15 text-sm font-bold transition-all duration-500">
+                  <span class="step-num">{i + 1}</span><Check class="step-check hidden size-4" stroke-width={3} />
+                </span>
+                <span class="font-semibold">{s}</span>
+              </li>
+            ))}
+          </ol>
+
+          <div data-reveal class="mt-10 hidden space-y-3 border-t border-ink/10 pt-8 text-sm lg:block">
+            <p class="font-semibold">Liever direct contact?</p>
+            <a href={company.phoneHref} class="flex items-center gap-3 text-muted hover:text-ink"><Phone class="size-4 text-gold-deep" aria-hidden="true" />{company.phone}</a>
+            <a href={company.whatsappHref} target="_blank" rel="noopener noreferrer" class="flex items-center gap-3 text-muted hover:text-ink"><MessageCircle class="size-4 text-gold-deep" aria-hidden="true" />WhatsApp</a>
+            <a href={`mailto:${company.email}`} class="flex items-center gap-3 text-muted hover:text-ink"><Mail class="size-4 text-gold-deep" aria-hidden="true" />{company.email}</a>
+          </div>
+        </div>
+      </aside>
+
+      <!-- Formulier -->
+      <div class="lg:col-span-8">
+        <div data-reveal class="relative overflow-hidden rounded-[2rem] border border-ink/10 bg-white/60 shadow-2xl shadow-night/5">
+          <!-- Voortgang -->
+          <div class="h-1.5 bg-ink/5">
+            <div id="progress" class="h-full origin-left bg-gold transition-transform duration-700 ease-[var(--ease-out-expo)]" style="transform:scaleX(.25)"></div>
+          </div>
+
+          <form id="offerte-form" novalidate class="relative scroll-mt-32 p-6 sm:p-10 md:p-12">
+            <Honeypot />
+            <p id="step-label" class="text-sm font-bold uppercase tracking-[0.14em] text-gold-deep" aria-live="polite">Stap 1 van 4</p>
+
+            <!-- Stap 1 -->
+            <fieldset data-step="0" class="step mt-4">
+              <legend class="font-display text-3xl font-semibold md:text-4xl">Waar kunnen we u mee helpen?</legend>
+              <p class="mt-2 text-muted">Kies één of meerdere werkzaamheden.</p>
+              <div class="mt-8 grid gap-3 sm:grid-cols-2 xl:grid-cols-3">
+                {services.map((s) => (
+                  <label class="chip group relative flex cursor-pointer items-center gap-3 rounded-2xl border-2 border-ink/10 bg-bone p-4 transition-all duration-300 hover:border-ink/30 has-[:checked]:border-gold has-[:checked]:bg-gold/10 has-[:focus-visible]:outline has-[:focus-visible]:outline-2 has-[:focus-visible]:outline-offset-2 has-[:focus-visible]:outline-gold">
+                    <input type="checkbox" name="dienst" value={s.title} data-slug={s.slug} class="sr-only" />
+                    <span class="grid size-10 shrink-0 place-items-center rounded-xl bg-gold/15 text-gold-deep transition-colors group-has-[:checked]:bg-gold group-has-[:checked]:text-ink"><ServiceIcon name={s.icon} class="size-5" /></span>
+                    <span class="text-[0.95rem] font-semibold leading-tight">{s.title}</span>
+                    <Check class="absolute right-3 top-3 size-4 scale-0 text-gold-deep transition-transform duration-300 group-has-[:checked]:scale-100" stroke-width={3} aria-hidden="true" />
+                  </label>
+                ))}
+              </div>
+              <p class="field-error mt-4 hidden text-sm font-semibold text-red-700" role="alert" data-error-for="dienst">Kies minimaal één dienst.</p>
+            </fieldset>
+
+            <!-- Stap 2 -->
+            <fieldset data-step="1" class="step mt-4 hidden">
+              <legend class="font-display text-3xl font-semibold md:text-4xl">Vertel iets over uw project</legend>
+              <p class="mt-2 text-muted">Hoe meer we weten, hoe beter onze offerte aansluit.</p>
+              <div class="mt-8 space-y-6">
+                <div>
+                  <label for="description" class="label">Omschrijving <span class="text-gold-deep">*</span></label>
+                  <textarea id="description" name="description" rows="5" required minlength="10" maxlength="5000" aria-describedby="description-help description-error" class="input min-h-36 resize-y" placeholder="Bijvoorbeeld: badkamer van ca. 6 m² volledig vernieuwen, inclusief inloopdouche en nieuw tegelwerk."></textarea>
+                  <p id="description-help" class="mt-1.5 text-sm text-muted">Wat wilt u laten doen, hoe groot is de ruimte en wat zijn uw wensen?</p>
+                  <p id="description-error" class="field-error mt-1.5 hidden text-sm font-semibold text-red-700" data-error-for="description">Geef een korte omschrijving (minimaal 10 tekens).</p>
+                </div>
+                <div class="grid gap-6 sm:grid-cols-2">
+                  <div>
+                    <label for="location" class="label">Plaats of postcode <span class="text-gold-deep">*</span></label>
+                    <input id="location" name="location" type="text" required autocomplete="postal-code" aria-describedby="location-error" class="input" placeholder="Bijv. 1012 AB of Amstelveen" />
+                    <p id="location-error" class="field-error mt-1.5 hidden text-sm font-semibold text-red-700" data-error-for="location">Vul uw plaats of postcode in.</p>
+                  </div>
+                  <div>
+                    <label for="startPeriod" class="label">Gewenste start</label>
+                    <select id="startPeriod" name="startPeriod" class="input">
+                      {startPeriods.map((p) => <option>{p}</option>)}
+                    </select>
+                  </div>
+                </div>
+                <div>
+                  <p class="label" id="property-label">Type pand</p>
+                  <div class="mt-2 flex flex-wrap gap-2" role="radiogroup" aria-labelledby="property-label">
+                    {propertyTypes.map((p, i) => (
+                      <label class="cursor-pointer rounded-full border-2 border-ink/10 px-4 py-2 text-sm font-semibold transition-colors hover:border-ink/30 has-[:checked]:border-gold has-[:checked]:bg-gold has-[:checked]:text-ink has-[:focus-visible]:outline has-[:focus-visible]:outline-2 has-[:focus-visible]:outline-offset-2 has-[:focus-visible]:outline-gold">
+                        <input type="radio" name="propertyType" value={p} class="sr-only" checked={i === 0} />{p}
+                      </label>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            </fieldset>
+
+            <!-- Stap 3 -->
+            <fieldset data-step="2" class="step mt-4 hidden">
+              <legend class="font-display text-3xl font-semibold md:text-4xl">Foto's toevoegen <span class="text-muted">(optioneel)</span></legend>
+              <p class="mt-2 text-muted">Met een paar foto's van de huidige situatie kunnen we sneller een goede inschatting maken.</p>
+              <label for="files" id="dropzone" class="mt-8 flex cursor-pointer flex-col items-center justify-center gap-3 rounded-3xl border-2 border-dashed border-ink/20 bg-bone px-6 py-14 text-center transition-colors hover:border-gold hover:bg-gold/5 has-[:focus-visible]:border-gold">
+                <span class="grid size-16 place-items-center rounded-2xl bg-gold/15 text-gold-deep"><ImagePlus class="size-8" stroke-width={1.6} aria-hidden="true" /></span>
+                <span class="font-display text-xl font-semibold">Klik of sleep foto's hierheen</span>
+                <span class="text-sm text-muted">JPG, PNG, HEIC of WebP · max. 5 foto's · max. 10 MB per foto</span>
+                <input id="files" name="files" type="file" accept="image/jpeg,image/png,image/heic,image/heif,image/webp" multiple class="sr-only" />
+              </label>
+              <p class="field-error mt-3 hidden text-sm font-semibold text-red-700" role="alert" data-error-for="files"></p>
+              <ul id="previews" class="mt-6 grid grid-cols-3 gap-3 sm:grid-cols-5" aria-label="Gekozen foto's"></ul>
+            </fieldset>
+
+            <!-- Stap 4 -->
+            <fieldset data-step="3" class="step mt-4 hidden">
+              <legend class="font-display text-3xl font-semibold md:text-4xl">Hoe kunnen we u bereiken?</legend>
+              <p class="mt-2 text-muted">We nemen binnen 24 uur contact met u op.</p>
+              <div class="mt-8 grid gap-6 sm:grid-cols-2">
+                <div class="sm:col-span-2">
+                  <label for="name" class="label">Naam <span class="text-gold-deep">*</span></label>
+                  <input id="name" name="name" type="text" required minlength="2" autocomplete="name" aria-describedby="name-error" class="input" />
+                  <p id="name-error" class="field-error mt-1.5 hidden text-sm font-semibold text-red-700" data-error-for="name">Vul uw naam in.</p>
+                </div>
+                <div>
+                  <label for="phone" class="label">Telefoonnummer <span class="text-gold-deep">*</span></label>
+                  <input id="phone" name="phone" type="tel" required autocomplete="tel" inputmode="tel" aria-describedby="phone-error" class="input" placeholder="06 12345678" />
+                  <p id="phone-error" class="field-error mt-1.5 hidden text-sm font-semibold text-red-700" data-error-for="phone">Vul een geldig telefoonnummer in (min. 10 cijfers).</p>
+                </div>
+                <div>
+                  <label for="email" class="label">E-mailadres <span class="text-gold-deep">*</span></label>
+                  <input id="email" name="email" type="email" required autocomplete="email" aria-describedby="email-error" class="input" placeholder="naam@voorbeeld.nl" />
+                  <p id="email-error" class="field-error mt-1.5 hidden text-sm font-semibold text-red-700" data-error-for="email">Vul een geldig e-mailadres in.</p>
+                </div>
+                <div class="sm:col-span-2">
+                  <p class="label" id="pref-label">Voorkeur voor contact</p>
+                  <div class="mt-2 flex flex-wrap gap-2" role="radiogroup" aria-labelledby="pref-label">
+                    {['Bellen', 'WhatsApp', 'E-mail'].map((p, i) => (
+                      <label class="cursor-pointer rounded-full border-2 border-ink/10 px-4 py-2 text-sm font-semibold transition-colors hover:border-ink/30 has-[:checked]:border-gold has-[:checked]:bg-gold has-[:checked]:text-ink has-[:focus-visible]:outline has-[:focus-visible]:outline-2 has-[:focus-visible]:outline-offset-2 has-[:focus-visible]:outline-gold">
+                        <input type="radio" name="contactPreference" value={p} class="sr-only" checked={i === 0} />{p}
+                      </label>
+                    ))}
+                  </div>
+                </div>
+                <div class="sm:col-span-2">
+                  <label class="flex cursor-pointer items-start gap-3 text-sm text-muted">
+                    <input id="privacy" name="privacy" type="checkbox" required class="mt-0.5 size-5 shrink-0 accent-[var(--color-gold)]" aria-describedby="privacy-error" />
+                    <span>Ik ga akkoord dat {company.name} mijn gegevens gebruikt om contact met mij op te nemen over deze aanvraag. Zie de <a href="/privacy/" class="font-semibold text-ink underline">privacyverklaring</a>.</span>
+                  </label>
+                  <p id="privacy-error" class="field-error mt-1.5 hidden text-sm font-semibold text-red-700" data-error-for="privacy">Ga akkoord met de privacyverklaring om verder te gaan.</p>
+                </div>
+              </div>
+            </fieldset>
+
+            <!-- Navigatie -->
+            <div id="form-nav" class="mt-10 flex items-center justify-between gap-4 border-t border-ink/10 pt-8">
+              <button type="button" id="prev" class="btn btn-ghost invisible"><ArrowLeft class="size-4" aria-hidden="true" /> Vorige</button>
+              <button type="button" id="next" class="btn btn-dark">Volgende <ArrowRight class="size-4" aria-hidden="true" /></button>
+              <button type="submit" id="submit" class="btn btn-primary hidden">
+                <span class="submit-label">Offerte aanvragen</span>
+                <span class="submit-loading hidden items-center gap-2"><span class="size-4 animate-spin rounded-full border-2 border-ink/30 border-t-ink"></span> Versturen…</span>
+              </button>
+            </div>
+            <div id="submit-error" class="mt-6 hidden rounded-2xl bg-red-50 p-5 text-sm text-red-800" role="alert">
+              <p class="font-semibold">Versturen is helaas niet gelukt.</p>
+              <p class="mt-1">Probeer het opnieuw, of neem direct contact op via <a href={company.phoneHref} class="font-semibold underline">{company.phone}</a> of <a href={`mailto:${company.email}`} class="font-semibold underline">{company.email}</a>.</p>
+            </div>
+          </form>
+
+          <!-- Succes -->
+          <div id="success" class="hidden flex-col items-center p-10 py-20 text-center md:p-16" tabindex="-1">
+            <span class="grid size-20 place-items-center rounded-full bg-gold text-ink"><Check class="size-10" stroke-width={2.5} aria-hidden="true" /></span>
+            <h2 class="mt-8 text-4xl font-bold md:text-5xl">Bedankt voor uw aanvraag!</h2>
+            <p class="mt-4 max-w-md text-lg text-muted">We hebben alles goed ontvangen en nemen binnen 24 uur contact met u op.</p>
+            <ul class="mt-8 flex flex-wrap justify-center gap-6 text-sm font-semibold">
+              <li class="flex items-center gap-2"><Clock class="size-4 text-gold-deep" aria-hidden="true" />Reactie binnen 24 uur</li>
+              <li class="flex items-center gap-2"><BadgeCheck class="size-4 text-gold-deep" aria-hidden="true" />Gratis opname</li>
+            </ul>
+            <a href="/" class="btn btn-dark mt-10"><Home class="size-4" aria-hidden="true" /> Terug naar home</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .label { display: block; font-weight: 700; font-size: 0.95rem; margin-bottom: 0.5rem; }
+  .input {
+    display: block;
+    width: 100%;
+    min-height: 3.25rem;
+    border-radius: 1rem;
+    border: 2px solid rgb(17 21 19 / 0.12);
+    background: var(--color-bone);
+    padding: 0.8rem 1rem;
+    font-size: 1rem;
+    transition: border-color 0.3s, box-shadow 0.3s;
+  }
+  .input:hover { border-color: rgb(17 21 19 / 0.28); }
+  .input:focus { outline: none; border-color: var(--color-gold); box-shadow: 0 0 0 4px rgb(181 136 73 / 0.18); }
+  .input[aria-invalid='true'] { border-color: #b91c1c; }
+  .step-ind.is-active { background: rgb(181 136 73 / 0.1); }
+  .step-ind.is-active .step-dot { border-color: var(--color-gold); background: var(--color-gold); color: var(--color-ink); }
+  .step-ind.is-done .step-dot { border-color: var(--color-night); background: var(--color-night); color: var(--color-bone); }
+  .step-ind.is-done .step-num { display: none; }
+  .step-ind.is-done .step-check { display: block; }
+</style>
+
+<script>
+  const MAX_FILES = 5;
+  const MAX_SIZE = 10 * 1024 * 1024;
+
+  const form = document.getElementById('offerte-form') as HTMLFormElement;
+  const steps = Array.from(form.querySelectorAll<HTMLFieldSetElement>('.step'));
+  const prev = document.getElementById('prev')!;
+  const next = document.getElementById('next')!;
+  const submit = document.getElementById('submit') as HTMLButtonElement;
+  const progress = document.getElementById('progress')!;
+  const stepLabel = document.getElementById('step-label')!;
+  const indicators = Array.from(document.querySelectorAll<HTMLElement>('[data-step-indicator]'));
+  const fileInput = document.getElementById('files') as HTMLInputElement;
+  const dropzone = document.getElementById('dropzone')!;
+  const previews = document.getElementById('previews')!;
+  const reduceMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  let current = 0;
+  let files: File[] = [];
+
+  // Dienst voorselecteren via ?dienst=slug
+  const pre = new URLSearchParams(location.search).get('dienst');
+  if (pre) {
+    const box = form.querySelector<HTMLInputElement>(`input[data-slug="${CSS.escape(pre)}"]`);
+    if (box) box.checked = true;
+  }
+
+  function showError(name: string, show: boolean, message?: string) {
+    const el = form.querySelector<HTMLElement>(`[data-error-for="${name}"]`);
+    if (el) {
+      el.classList.toggle('hidden', !show);
+      if (message) el.textContent = message;
+    }
+    const field = form.querySelector<HTMLElement>(`#${name}`);
+    if (field) field.setAttribute('aria-invalid', String(show));
+  }
+
+  function validate(step: number): boolean {
+    const errors: string[] = [];
+    if (step === 0) {
+      const ok = form.querySelectorAll('input[name="dienst"]:checked').length > 0;
+      showError('dienst', !ok);
+      if (!ok) errors.push('dienst');
+    }
+    if (step === 1) {
+      const d = (form.elements.namedItem('description') as HTMLTextAreaElement).value.trim();
+      const l = (form.elements.namedItem('location') as HTMLInputElement).value.trim();
+      showError('description', d.length < 10); if (d.length < 10) errors.push('description');
+      showError('location', l.length < 2); if (l.length < 2) errors.push('location');
+    }
+    if (step === 3) {
+      const n = (form.elements.namedItem('name') as HTMLInputElement).value.trim();
+      const p = (form.elements.namedItem('phone') as HTMLInputElement).value.trim();
+      const e = form.elements.namedItem('email') as HTMLInputElement;
+      const pr = form.elements.namedItem('privacy') as HTMLInputElement;
+      const phoneOk = /^[0-9\s\-+()]{10,15}$/.test(p);
+      showError('name', n.length < 2); if (n.length < 2) errors.push('name');
+      showError('phone', !phoneOk); if (!phoneOk) errors.push('phone');
+      showError('email', !e.value.trim() || !e.checkValidity()); if (!e.value.trim() || !e.checkValidity()) errors.push('email');
+      showError('privacy', !pr.checked); if (!pr.checked) errors.push('privacy');
+    }
+    if (errors.length) {
+      const first = form.querySelector<HTMLElement>(errors[0] === 'dienst' ? 'input[name="dienst"]' : `#${errors[0]}`);
+      first?.focus();
+    }
+    return errors.length === 0;
+  }
+
+  function go(to: number, initial = false) {
+    const from = steps[current];
+    const target = steps[to];
+    const dir = to > current ? 1 : -1;
+    from.classList.add('hidden');
+    target.classList.remove('hidden');
+    if (!reduceMotion && !initial) {
+      target.animate(
+        [{ opacity: 0, transform: `translateX(${dir * 32}px)` }, { opacity: 1, transform: 'none' }],
+        { duration: 550, easing: 'cubic-bezier(.16,1,.3,1)' },
+      );
+    }
+    current = to;
+    progress.style.transform = `scaleX(${(current + 1) / steps.length})`;
+    stepLabel.textContent = `Stap ${current + 1} van ${steps.length}`;
+    prev.classList.toggle('invisible', current === 0);
+    next.classList.toggle('hidden', current === steps.length - 1);
+    submit.classList.toggle('hidden', current !== steps.length - 1);
+    indicators.forEach((ind, i) => {
+      ind.classList.toggle('is-active', i === current);
+      ind.classList.toggle('is-done', i < current);
+    });
+    if (initial) return;
+    const legend = target.querySelector<HTMLElement>('legend');
+    legend?.setAttribute('tabindex', '-1');
+    legend?.focus({ preventScroll: true });
+    form.scrollIntoView({ behavior: reduceMotion ? 'auto' : 'smooth', block: 'start' });
+  }
+
+  next.addEventListener('click', () => { if (validate(current)) go(current + 1); });
+  prev.addEventListener('click', () => go(current - 1));
+  // Enter in een tekstveld gaat naar de volgende stap i.p.v. versturen
+  form.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter' && (e.target as HTMLElement).tagName === 'INPUT' && current < steps.length - 1) {
+      e.preventDefault();
+      next.click();
+    }
+  });
+  // Fout verdwijnt zodra het veld wordt aangepast
+  form.addEventListener('input', (e) => {
+    const t = e.target as HTMLInputElement;
+    const key = t.name === 'dienst' ? 'dienst' : t.id;
+    if (key) showError(key, false);
+  });
+
+  // ─── Foto's ───
+  function renderPreviews() {
+    previews.innerHTML = '';
+    files.forEach((file, i) => {
+      const li = document.createElement('li');
+      li.className = 'relative aspect-square overflow-hidden rounded-2xl bg-sand';
+      const img = document.createElement('img');
+      img.alt = file.name;
+      img.className = 'h-full w-full object-cover';
+      img.src = URL.createObjectURL(file);
+      img.onload = () => URL.revokeObjectURL(img.src);
+      const btn = document.createElement('button');
+      btn.type = 'button';
+      btn.className = 'absolute right-1.5 top-1.5 grid size-8 place-items-center rounded-full bg-ink/80 text-bone text-lg leading-none hover:bg-ink';
+      btn.setAttribute('aria-label', `${file.name} verwijderen`);
+      btn.textContent = '×';
+      btn.addEventListener('click', () => { files.splice(i, 1); renderPreviews(); });
+      li.append(img, btn);
+      previews.append(li);
+    });
+  }
+
+  function addFiles(list: FileList | null) {
+    if (!list) return;
+    let message = '';
+    for (const f of Array.from(list)) {
+      if (files.length >= MAX_FILES) { message = `U kunt maximaal ${MAX_FILES} foto's toevoegen.`; break; }
+      if (!/^image\/(jpeg|png|heic|heif|webp)$/.test(f.type)) { message = `"${f.name}" is geen ondersteund fotoformaat.`; continue; }
+      if (f.size > MAX_SIZE) { message = `"${f.name}" is groter dan 10 MB.`; continue; }
+      files.push(f);
+    }
+    showError('files', !!message, message);
+    renderPreviews();
+    fileInput.value = '';
+  }
+
+  fileInput.addEventListener('change', () => addFiles(fileInput.files));
+  ['dragenter', 'dragover'].forEach((ev) => dropzone.addEventListener(ev, (e) => { e.preventDefault(); dropzone.classList.add('border-gold'); }));
+  ['dragleave', 'drop'].forEach((ev) => dropzone.addEventListener(ev, (e) => { e.preventDefault(); dropzone.classList.remove('border-gold'); }));
+  dropzone.addEventListener('drop', (e) => addFiles((e as DragEvent).dataTransfer?.files ?? null));
+
+  // ─── Versturen ───
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    if (!validate(3)) return;
+    const errorBox = document.getElementById('submit-error')!;
+    errorBox.classList.add('hidden');
+    submit.disabled = true;
+    submit.querySelector('.submit-label')!.classList.add('hidden');
+    submit.querySelector('.submit-loading')!.classList.replace('hidden', 'inline-flex');
+
+    const data = new FormData();
+    const diensten = Array.from(form.querySelectorAll<HTMLInputElement>('input[name="dienst"]:checked')).map((i) => i.value);
+    data.append('dienst', diensten.join(', '));
+    ['description', 'location', 'startPeriod', 'name', 'phone', 'email'].forEach((k) => {
+      data.append(k, (form.elements.namedItem(k) as HTMLInputElement).value.trim());
+    });
+    data.append('propertyType', (form.querySelector('input[name="propertyType"]:checked') as HTMLInputElement)?.value ?? '');
+    data.append('contactPreference', (form.querySelector('input[name="contactPreference"]:checked') as HTMLInputElement)?.value ?? '');
+    data.append('privacy', 'true');
+    data.append('website', (form.elements.namedItem('website') as HTMLInputElement).value);
+    files.forEach((f) => data.append('files', f));
+
+    try {
+      const res = await fetch('/api/offerte', { method: 'POST', body: data });
+      const json = await res.json().catch(() => ({}));
+      if (!res.ok || !json.success) throw new Error(json.message || 'Versturen mislukt');
+      form.classList.add('hidden');
+      document.getElementById('form-nav')?.remove();
+      const success = document.getElementById('success')!;
+      success.classList.replace('hidden', 'flex');
+      success.focus();
+      progress.style.transform = 'scaleX(1)';
+      indicators.forEach((ind) => { ind.classList.remove('is-active'); ind.classList.add('is-done'); });
+    } catch {
+      errorBox.classList.remove('hidden');
+      submit.disabled = false;
+      submit.querySelector('.submit-label')!.classList.remove('hidden');
+      submit.querySelector('.submit-loading')!.classList.replace('inline-flex', 'hidden');
+    }
+  });
+
+  go(0, true);
+</script>

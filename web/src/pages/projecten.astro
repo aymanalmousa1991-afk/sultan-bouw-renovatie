@@ -1,0 +1,21 @@
+---
+import Base from '../layouts/Base.astro';
+import PageHero from '../components/PageHero.astro';
+import ProjectGallery from '../components/ProjectGallery.astro';
+import CtaBand from '../components/CtaBand.astro';
+import { projects } from '../data/projects';
+import { company } from '../data/site';
+---
+<Base title="Projecten" description={`Bekijk uitgevoerde projecten van ${company.name}: plafonds met LED-verlichting, tv-wanden, wandpanelen, vloeren, schilderwerk, keukens en buitenwerk.`} darkTop>
+  <PageHero
+    eyebrow="Projecten"
+    title="Werk waar we trots op zijn."
+    intro="Een overzicht van recente projecten in en rond Amsterdam. Klik op een foto om hem groot te bekijken."
+  />
+  <section class="py-20 md:py-28">
+    <div class="container-x">
+      <ProjectGallery items={projects} filter id="all" />
+    </div>
+  </section>
+  <CtaBand title="Zo'n resultaat ook bij u thuis?" />
+</Base>

@@ -1,0 +1,18 @@
+---
+import Base from '../../layouts/Base.astro';
+import PageHero from '../../components/PageHero.astro';
+import Services from '../../components/home/Services.astro';
+import Process from '../../components/home/Process.astro';
+import CtaBand from '../../components/CtaBand.astro';
+import { company } from '../../data/site';
+---
+<Base title="Diensten" description={`Alle diensten van ${company.name}: schilderwerk, tegelwerk, loodgieterswerk, stucwerk, timmerwerk, badkamer- en keukenrenovatie, vloeren en complete woningrenovaties.`} darkTop>
+  <PageHero
+    eyebrow="Diensten"
+    title="Vakwerk voor elke ruimte in huis."
+    intro={`Twaalf disciplines, één aanspreekpunt. Kies hieronder een dienst voor meer informatie, of vraag direct een vrijblijvende offerte aan.`}
+  />
+  <Services showAllLink={false} />
+  <Process />
+  <CtaBand />
+</Base>

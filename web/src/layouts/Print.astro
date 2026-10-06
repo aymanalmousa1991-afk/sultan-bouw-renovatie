@@ -1,0 +1,28 @@
+---
+import '../styles/global.css';
+
+/** Kale layout voor drukwerk (wordt door scripts/drukwerk.mjs naar PDF omgezet). */
+interface Props { title: string; width: string; height: string }
+const { title, width, height } = Astro.props;
+---
+<!doctype html>
+<html lang="nl">
+<head>
+  <meta charset="utf-8" />
+  <meta name="robots" content="noindex, nofollow" />
+  <title>{title}</title>
+  <style set:html={`@page { size: ${width} ${height}; margin: 0; } .sheet { width: ${width}; height: ${height}; }`}></style>
+</head>
+<body class="print-body">
+  <slot />
+</body>
+</html>
+
+<style is:global>
+  html, body.print-body { margin: 0; padding: 0; background: #888; }
+  .print-body { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  .sheet { position: relative; overflow: hidden; break-after: page; margin: 0 auto 8mm; }
+  .sheet:last-child { break-after: auto; }
+  @media print { html, body.print-body { background: none; } .sheet { margin: 0; } }
+  .qr svg { width: 100%; height: 100%; display: block; }
+</style>

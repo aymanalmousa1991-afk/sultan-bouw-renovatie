@@ -1,0 +1,78 @@
+---
+import { MapPin } from '@lucide/astro';
+import { company, areas } from '../../data/site';
+
+// Posities t.o.v. Amsterdam (centrum 280,280; 4px = 1 km)
+const cities = [
+  { name: 'Amstelveen', x: 268, y: 310 }, { name: 'Haarlem', x: 208, y: 274 },
+  { name: 'Zaandam', x: 260, y: 248 }, { name: 'Almere', x: 364, y: 280 },
+  { name: 'Hoofddorp', x: 222, y: 310 }, { name: 'Purmerend', x: 292, y: 221 },
+  { name: 'Hilversum', x: 356, y: 344 }, { name: 'Utrecht', x: 339, y: 403 },
+  { name: 'Leiden', x: 168, y: 372 }, { name: 'Alkmaar', x: 238, y: 164 },
+  { name: 'Lelystad', x: 434, y: 212 }, { name: 'Weesp', x: 316, y: 304 },
+];
+const labelled = new Set(['Haarlem', 'Almere', 'Utrecht', 'Leiden', 'Alkmaar', 'Lelystad', 'Hilversum', 'Purmerend']);
+---
+<section class="on-dark relative overflow-hidden bg-ink py-24 text-bone md:py-36">
+  <div class="container-x grid grid-cols-1 items-center gap-16 lg:grid-cols-2">
+    <div>
+      <p class="eyebrow" data-reveal>Werkgebied</p>
+      <h2 data-split class="mt-5 text-[clamp(2.2rem,4.6vw,4rem)] font-bold">Gevestigd in {company.city}. Actief tot {company.radiusKm}&nbsp;km daarbuiten.</h2>
+      <p data-reveal class="mt-6 max-w-lg text-lg text-bone/70">
+        We komen graag bij u langs voor een gratis opname. Twijfelt u of uw woonplaats binnen ons werkgebied valt? Bel of app ons gerust.
+      </p>
+      <ul data-reveal class="mt-10 flex flex-wrap gap-2">
+        {areas.map((a) => (
+          <li class="inline-flex items-center gap-1.5 rounded-full border border-white/15 px-3.5 py-1.5 text-sm text-bone/80">
+            <MapPin class="size-3.5 text-gold-light" aria-hidden="true" />{a}
+          </li>
+        ))}
+      </ul>
+    </div>
+
+    <div data-reveal class="relative mx-auto w-full max-w-[34rem]">
+      <svg viewBox="0 0 560 560" class="h-auto w-full" role="img" aria-label={`Kaart van het werkgebied: ${company.radiusKm} km rond ${company.city}`}>
+        <g fill="none" stroke="#f4f1ea">
+          <circle cx="280" cy="280" r="240" stroke-opacity=".18" stroke-dasharray="4 8" />
+          <circle cx="280" cy="280" r="160" stroke-opacity=".14" />
+          <circle cx="280" cy="280" r="80" stroke-opacity=".12" />
+        </g>
+        <circle cx="280" cy="280" r="240" fill="#b58849" fill-opacity=".06" />
+        <g fill="#f4f1ea" fill-opacity=".4" font-family="Manrope Variable, sans-serif" font-size="11" font-weight="700" letter-spacing="1">
+          <text x="280" y="196" text-anchor="middle">20 KM</text>
+          <text x="280" y="116" text-anchor="middle">40 KM</text>
+          <text x="280" y="36" text-anchor="middle">60 KM</text>
+        </g>
+        {cities.map((c) => (
+          <g>
+            <circle cx={c.x} cy={c.y} r="4.5" fill="#d4a865" />
+            {labelled.has(c.name) && (
+              <text x={c.x + 9} y={c.y + 4} fill="#f4f1ea" fill-opacity=".75" font-family="Manrope Variable, sans-serif" font-size="13" font-weight="600">{c.name}</text>
+            )}
+          </g>
+        ))}
+        <circle cx="280" cy="280" r="10" fill="#b58849" class="pulse" />
+        <circle cx="280" cy="280" r="10" fill="#b58849" />
+        <g transform="translate(280 234)">
+          <rect x="-62" y="-17" width="124" height="34" rx="17" fill="#b58849" />
+          <text y="6" text-anchor="middle" fill="#1c1a18" font-family="Bricolage Grotesque Variable, sans-serif" font-size="17" font-weight="700">{company.city}</text>
+        </g>
+      </svg>
+    </div>
+  </div>
+</section>
+
+<style>
+  .pulse {
+    transform-box: fill-box;
+    transform-origin: center;
+    animation: pulse 2.4s cubic-bezier(0.16, 1, 0.3, 1) infinite;
+  }
+  @keyframes pulse {
+    from { transform: scale(1); opacity: 0.7; }
+    to { transform: scale(4.5); opacity: 0; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .pulse { animation: none; opacity: 0; }
+  }
+</style>

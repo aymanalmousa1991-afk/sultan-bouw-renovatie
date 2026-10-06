@@ -1,0 +1,33 @@
+---
+import Base from '../layouts/Base.astro';
+import Hero from '../components/home/Hero.astro';
+import Marquee from '../components/home/Marquee.astro';
+import About from '../components/home/About.astro';
+import Services from '../components/home/Services.astro';
+import Projects from '../components/home/Projects.astro';
+import Stats from '../components/home/Stats.astro';
+import Process from '../components/home/Process.astro';
+import Reviews from '../components/home/Reviews.astro';
+import Area from '../components/home/Area.astro';
+import Faq from '../components/home/Faq.astro';
+import CtaBand from '../components/CtaBand.astro';
+import { faqs } from '../data/site';
+
+const faqSchema = {
+  '@type': 'FAQPage',
+  mainEntity: faqs.map((f) => ({ '@type': 'Question', name: f.q, acceptedAnswer: { '@type': 'Answer', text: f.a } })),
+};
+---
+<Base darkTop schema={[faqSchema]}>
+  <Hero />
+  <Marquee />
+  <About />
+  <Services />
+  <Projects />
+  <Stats />
+  <Process />
+  <Reviews />
+  <Area />
+  <Faq />
+  <CtaBand />
+</Base>

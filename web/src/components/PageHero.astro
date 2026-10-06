@@ -1,0 +1,15 @@
+---
+interface Props { eyebrow: string; title: string; intro?: string }
+const { eyebrow, title, intro } = Astro.props;
+---
+<section class="on-dark grain relative isolate overflow-hidden bg-night pb-20 pt-40 text-bone md:pb-28 md:pt-48">
+  <div class="blueprint-grid absolute inset-0 -z-10" aria-hidden="true"></div>
+  <div class="absolute -right-40 -top-40 -z-10 size-[36rem] rounded-full bg-night-2 blur-3xl" aria-hidden="true"></div>
+  <div class="container-x">
+    <slot name="before" />
+    <p class="eyebrow" data-reveal>{eyebrow}</p>
+    <h1 data-split="load" class="mt-6 max-w-5xl text-[clamp(2.6rem,6.5vw,5.75rem)] font-bold">{title}</h1>
+    {intro && <p data-reveal class="mt-7 max-w-2xl text-lg text-bone/75 md:text-xl">{intro}</p>}
+    <slot />
+  </div>
+</section>

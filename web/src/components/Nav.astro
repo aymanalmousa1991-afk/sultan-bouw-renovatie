@@ -1,0 +1,152 @@
+---
+import { Phone, ArrowRight } from '@lucide/astro';
+import Logo from './Logo.astro';
+import Socials from './Socials.astro';
+import { company } from '../data/site';
+
+interface Props { darkTop?: boolean }
+const { darkTop = false } = Astro.props;
+
+const links = [
+  { href: '/diensten/', label: 'Diensten' },
+  { href: '/projecten/', label: 'Projecten' },
+  { href: '/#werkwijze', label: 'Werkwijze' },
+  { href: '/#over', label: 'Over ons' },
+  { href: '/contact/', label: 'Contact' },
+];
+const path = Astro.url.pathname;
+---
+<header
+  id="site-nav"
+  data-dark-top={darkTop ? 'true' : 'false'}
+  class="group/nav fixed inset-x-0 top-0 z-50 transition-[transform,background-color,box-shadow] duration-500 ease-[var(--ease-out-expo)]"
+>
+  <div class="container-x flex h-24 items-center justify-between gap-6">
+    <a href="/" aria-label={`${company.name} — home`} class="nav-logo relative z-10">
+      <span class="logo-dark"><Logo tone="dark" /></span>
+      <span class="logo-light hidden"><Logo tone="light" /></span>
+    </a>
+
+    <nav aria-label="Hoofdmenu" class="hidden lg:block">
+      <ul class="flex items-center gap-1">
+        {links.map((l) => (
+          <li>
+            <a
+              href={l.href}
+              aria-current={path.startsWith(l.href) && l.href !== '/' ? 'page' : undefined}
+              class="nav-link relative rounded-full px-4 py-2 text-[0.95rem] font-semibold transition-colors after:absolute after:inset-x-4 after:bottom-1 after:h-[2px] after:origin-left after:scale-x-0 after:bg-gold after:transition-transform after:duration-500 after:ease-[var(--ease-out-expo)] hover:after:scale-x-100 aria-[current=page]:after:scale-x-100"
+            >{l.label}</a>
+          </li>
+        ))}
+      </ul>
+    </nav>
+
+    <div class="flex items-center gap-2">
+      <a href={company.phoneHref} class="nav-phone hidden items-center gap-2 rounded-full px-4 py-2 text-sm font-bold md:inline-flex">
+        <Phone class="size-4" aria-hidden="true" /> {company.phone}
+      </a>
+      <a href="/offerte/" class="btn btn-primary hidden !min-h-11 !py-2.5 sm:inline-flex">
+        Gratis offerte <ArrowRight class="size-4" aria-hidden="true" />
+      </a>
+      <button
+        id="menu-toggle"
+        type="button"
+        class="nav-burger relative z-10 grid size-12 place-items-center rounded-full lg:hidden"
+        aria-expanded="false"
+        aria-controls="mobile-menu"
+        aria-label="Menu openen"
+      >
+        <span class="relative block h-3.5 w-6">
+          <span class="burger-line absolute left-0 top-0 h-[2px] w-6 bg-current transition-transform duration-500 ease-[var(--ease-out-expo)]"></span>
+          <span class="burger-line absolute bottom-0 left-0 h-[2px] w-6 bg-current transition-transform duration-500 ease-[var(--ease-out-expo)]"></span>
+        </span>
+      </button>
+    </div>
+  </div>
+</header>
+
+<!-- Mobiel menu -->
+<div id="mobile-menu" class="on-dark fixed inset-0 z-40 hidden flex-col bg-night text-bone lg:hidden" aria-hidden="true">
+  <div class="blueprint-grid absolute inset-0 opacity-60" aria-hidden="true"></div>
+  <nav aria-label="Mobiel menu" class="container-x relative flex flex-1 flex-col justify-center gap-2 pt-20">
+    {[{ href: '/', label: 'Home' }, ...links, { href: '/offerte/', label: 'Offerte' }].map((l, i) => (
+      <a href={l.href} class="mm-link flex items-baseline gap-4 border-b border-white/10 py-3 font-display text-4xl font-semibold tracking-tight sm:text-5xl">
+        <span class="font-sans text-xs font-bold text-gold-light">0{i + 1}</span>{l.label}
+      </a>
+    ))}
+  </nav>
+  <div class="container-x relative flex flex-col gap-3 pb-10 pt-6 text-sm">
+    <a href={company.phoneHref} class="mm-link inline-flex items-center gap-2 font-bold"><Phone class="size-4" aria-hidden="true" /> {company.phone}</a>
+    <a href={`mailto:${company.email}`} class="mm-link opacity-80">{company.email}</a>
+    <Socials class="mm-link mt-3" />
+  </div>
+</div>
+
+<style>
+  /* Kleuren van de navigatie: licht over donkere hero, donker over lichte achtergrond */
+  #site-nav { color: var(--color-ink); }
+  #site-nav[data-dark-top='true']:not(.is-scrolled) { color: var(--color-bone); }
+  #site-nav[data-dark-top='true']:not(.is-scrolled) .logo-dark { display: none; }
+  #site-nav[data-dark-top='true']:not(.is-scrolled) .logo-light { display: inline; }
+  #site-nav.is-scrolled {
+    background: rgb(244 241 234 / 0.82);
+    backdrop-filter: blur(18px) saturate(1.4);
+    box-shadow: 0 1px 0 rgb(17 21 19 / 0.08);
+  }
+  #site-nav.is-hidden { transform: translateY(-100%); }
+  .nav-phone:hover, .nav-link:hover { color: var(--color-gold-deep); }
+  #site-nav[data-dark-top='true']:not(.is-scrolled) .nav-phone:hover,
+  #site-nav[data-dark-top='true']:not(.is-scrolled) .nav-link:hover { color: var(--color-gold-light); }
+
+  /* Menu open */
+  :global(html.menu-open) #site-nav { color: var(--color-bone); background: transparent; box-shadow: none; backdrop-filter: none; transform: none; }
+  :global(html.menu-open) #site-nav .logo-dark { display: none; }
+  :global(html.menu-open) #site-nav .logo-light { display: inline; }
+  :global(html.menu-open) .burger-line:first-child { transform: translateY(6px) rotate(45deg); }
+  :global(html.menu-open) .burger-line:last-child { transform: translateY(-6px) rotate(-45deg); }
+</style>
+
+<script>
+  const nav = document.getElementById('site-nav')!;
+  const toggle = document.getElementById('menu-toggle')!;
+  const menu = document.getElementById('mobile-menu')!;
+  const root = document.documentElement;
+
+  // Verberg bij naar beneden scrollen, toon bij omhoog scrollen
+  let lastY = window.scrollY;
+  const onScroll = () => {
+    const y = window.scrollY;
+    nav.classList.toggle('is-scrolled', y > 24);
+    nav.classList.toggle('is-hidden', y > 240 && y > lastY && !root.classList.contains('menu-open'));
+    lastY = y;
+  };
+  window.addEventListener('scroll', onScroll, { passive: true });
+  onScroll();
+
+  const setOpen = (open: boolean) => {
+    root.classList.toggle('menu-open', open);
+    toggle.setAttribute('aria-expanded', String(open));
+    toggle.setAttribute('aria-label', open ? 'Menu sluiten' : 'Menu openen');
+    menu.setAttribute('aria-hidden', String(!open));
+    menu.classList.toggle('hidden', !open);
+    menu.classList.toggle('flex', open);
+    window.dispatchEvent(new CustomEvent(open ? 'scroll-lock' : 'scroll-unlock'));
+    if (open) {
+      menu.querySelectorAll<HTMLElement>('.mm-link').forEach((el, i) => {
+        el.animate(
+          [{ opacity: 0, transform: 'translateY(24px)' }, { opacity: 1, transform: 'none' }],
+          { duration: 600, delay: 60 + i * 45, easing: 'cubic-bezier(.16,1,.3,1)', fill: 'backwards' },
+        );
+      });
+    }
+  };
+
+  toggle.addEventListener('click', () => setOpen(!root.classList.contains('menu-open')));
+  menu.querySelectorAll('a').forEach((a) => a.addEventListener('click', () => setOpen(false)));
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && root.classList.contains('menu-open')) {
+      setOpen(false);
+      toggle.focus();
+    }
+  });
+</script>

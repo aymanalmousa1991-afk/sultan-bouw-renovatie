@@ -1,0 +1,80 @@
+---
+import { Picture } from 'astro:assets';
+import { ArrowRight, Phone, BadgeCheck, Clock, ShieldCheck } from '@lucide/astro';
+import { company } from '../../data/site';
+import main from '../../assets/projects/plafond-led-lijnen-tv-wand.jpg';
+import second from '../../assets/projects/wandlijsten-sfeerverlichting.jpg';
+---
+<section class="on-dark grain relative isolate overflow-hidden bg-night text-bone">
+  <div class="blueprint-grid absolute inset-0 -z-10" aria-hidden="true"></div>
+  <div class="absolute -right-40 -top-40 -z-10 size-[42rem] rounded-full bg-gold/10 blur-3xl" aria-hidden="true"></div>
+
+  <div class="container-x grid grid-cols-1 min-h-[100svh] items-center gap-14 pb-20 pt-32 lg:grid-cols-12 lg:gap-8 lg:pb-24">
+    <div class="lg:col-span-6 xl:col-span-7">
+      <p class="eyebrow" data-reveal>Bouw &amp; Renovatie · {company.city} e.o.</p>
+      <h1 data-split="load" class="mt-6 text-[clamp(2.9rem,7.2vw,6.4rem)] font-bold">
+        Vakwerk dat uw huis <span class="text-gold-light">thuis</span> maakt.
+      </h1>
+      <p data-reveal class="mt-7 max-w-xl text-lg text-bone/75 md:text-xl">
+        Van strak stucwerk en sfeervolle tv-wanden tot een complete woningrenovatie. Al {company.yearsExperience}+ jaar het vertrouwde adres in {company.city} en tot {company.radiusKm}&nbsp;km daarbuiten.
+      </p>
+      <div data-reveal class="mt-10 flex flex-wrap gap-3">
+        <a href="/offerte/" class="btn btn-primary" data-magnetic>Gratis offerte aanvragen <ArrowRight class="size-4" aria-hidden="true" /></a>
+        <a href="/projecten/" class="btn btn-ghost">Bekijk ons werk</a>
+      </div>
+      <ul data-reveal class="mt-12 grid max-w-2xl gap-4 text-sm text-bone/80 sm:grid-cols-3">
+        <li class="flex items-center gap-2.5"><Clock class="size-5 shrink-0 text-gold-light" aria-hidden="true" />Reactie binnen 24 uur</li>
+        <li class="flex items-center gap-2.5"><BadgeCheck class="size-5 shrink-0 text-gold-light" aria-hidden="true" />Heldere prijs vooraf</li>
+        <li class="flex items-center gap-2.5"><ShieldCheck class="size-5 shrink-0 text-gold-light" aria-hidden="true" />KvK {company.kvk}</li>
+      </ul>
+    </div>
+
+    <!-- Fotocompositie -->
+    <div class="relative mx-auto w-full max-w-[34rem] pb-10 pl-10 lg:col-span-6 lg:max-w-none xl:col-span-5">
+      <div data-clip-reveal class="relative aspect-[4/5] overflow-hidden rounded-[2rem]">
+        <Picture
+          src={main}
+          formats={['avif', 'webp']}
+          widths={[480, 720, 960, 1200]}
+          sizes="(min-width: 1024px) 40vw, 90vw"
+          alt="Strak gestuct plafond met LED-lijnen en een tv-wand in marmerlook"
+          loading="eager"
+          fetchpriority="high"
+          class="h-full w-full"
+          pictureAttributes={{ class: 'block h-full w-full [&>img]:h-full [&>img]:w-full [&>img]:object-cover' }}
+        />
+      </div>
+      <div data-clip-reveal data-delay="0.35" class="absolute bottom-0 left-0 w-[46%] overflow-hidden rounded-[1.5rem] border-4 border-night shadow-2xl shadow-black/40">
+        <div class="aspect-[3/4]">
+          <Picture
+            src={second}
+            formats={['avif', 'webp']}
+            widths={[320, 480, 640]}
+            sizes="(min-width: 1024px) 18vw, 40vw"
+            alt="Witte wandlijsten met indirecte verlichting boven een visgraatvloer"
+            loading="eager"
+            pictureAttributes={{ class: 'block h-full w-full [&>img]:h-full [&>img]:w-full [&>img]:object-cover' }}
+          />
+        </div>
+      </div>
+      <div data-reveal class="absolute -right-2 top-8 rounded-2xl bg-gold px-5 py-4 text-ink shadow-2xl shadow-black/30 sm:-right-6">
+        <p class="font-display text-3xl font-bold leading-none">{company.yearsExperience}+ jaar</p>
+        <p class="mt-1 text-xs font-bold uppercase tracking-[0.14em] text-ink/70">vakmanschap</p>
+      </div>
+    </div>
+  </div>
+
+  <a href="#over" class="absolute bottom-8 left-1/2 hidden -translate-x-1/2 flex-col items-center gap-3 text-xs font-bold uppercase tracking-[0.2em] text-bone/50 transition-colors hover:text-bone lg:flex" aria-label="Scroll naar beneden">
+    Scroll
+    <span class="relative block h-12 w-px overflow-hidden bg-bone/20"><span class="scroll-dot absolute inset-x-0 top-0 h-4 bg-gold-light"></span></span>
+  </a>
+</section>
+
+<style>
+  .scroll-dot { animation: scroll-dot 2s cubic-bezier(0.76, 0, 0.24, 1) infinite; }
+  @keyframes scroll-dot {
+    from { transform: translateY(-100%); }
+    to { transform: translateY(300%); }
+  }
+  @media (prefers-reduced-motion: reduce) { .scroll-dot { animation: none; } }
+</style>

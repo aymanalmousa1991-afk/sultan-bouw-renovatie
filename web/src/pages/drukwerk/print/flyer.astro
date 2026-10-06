@@ -1,0 +1,122 @@
+---
+import { Image } from 'astro:assets';
+import { Check, Phone, Mail, AtSign, MapPin, Clock, BadgeCheck, UserRound, Sparkles } from '@lucide/astro';
+import Print from '../../../layouts/Print.astro';
+import LogoHorizontal from '../../../assets/brand/logo-horizontal-light.svg';
+import LogoDark from '../../../assets/brand/logo-horizontal-dark.svg';
+import { company, services, process } from '../../../data/site';
+import { qrSvg } from '../../../lib/qr';
+import cover from '../../../assets/projects/woonkamer-led-plafond.jpg';
+import p1 from '../../../assets/projects/tv-wand-sfeerverlichting.jpg';
+import p2 from '../../../assets/projects/wandpanelen-gang.jpg';
+import p3 from '../../../assets/projects/keuken-montage.jpg';
+import p4 from '../../../assets/projects/plafond-led-lijnen-tv-wand.jpg';
+import owner from '../../../assets/eigenaar.jpg';
+
+// A5 (148 × 210 mm) + 3 mm afloop rondom = 154 × 216 mm
+const qrGold = await qrSvg(company.whatsappHref, '#1c1a18');
+const insta = '@' + company.socials.instagram.replace(/\/$/, '').split('/').pop();
+const usps = [
+  { icon: Clock, title: `${company.yearsExperience}+ jaar ervaring`, text: 'Vakmanschap waar u op kunt bouwen.' },
+  { icon: BadgeCheck, title: 'Heldere prijs vooraf', text: 'Gratis opname, eerlijke offerte.' },
+  { icon: UserRound, title: 'Eén aanspreekpunt', text: 'Direct contact met de eigenaar.' },
+  { icon: Sparkles, title: 'Netjes & op tijd', text: 'Schone werkplek, elke dag.' },
+];
+const photos = [p1, p2, p3, p4];
+---
+<Print title="Flyer A5" width="154mm" height="216mm">
+  <!-- ─── Voorkant ─── -->
+  <section class="sheet flex flex-col bg-bone text-ink">
+    <div class="relative h-[112mm] shrink-0 overflow-hidden bg-night">
+      <Image src={cover} width={1800} alt="" class="absolute inset-0 h-full w-full object-cover" />
+      <div class="absolute inset-0 bg-gradient-to-b from-night/80 via-night/10 to-night/90"></div>
+      <LogoHorizontal class="absolute left-[11mm] top-[11mm] h-[13mm] w-auto" role="img" aria-label={company.name} />
+      <div class="absolute inset-x-[11mm] bottom-[9mm] text-bone">
+        <p class="text-[7pt] font-bold uppercase tracking-[0.28em] text-gold-light">Bouw &amp; Renovatie · {company.city} e.o.</p>
+        <h1 class="mt-[2.5mm] text-[27pt] font-bold leading-[0.98]">Vakwerk dat uw huis <span class="text-gold-light">thuis</span> maakt.</h1>
+      </div>
+    </div>
+
+    <div class="flex flex-1 flex-col px-[11mm] pb-[9mm] pt-[7mm]">
+      <p class="eyebrow !text-[6.5pt]">Onze werkzaamheden</p>
+      <ul class="mt-[3.5mm] grid grid-cols-2 gap-x-[5mm] gap-y-[1.9mm] text-[8.2pt] font-semibold leading-tight">
+        {services.map((s) => (
+          <li class="flex items-center gap-[2mm]">
+            <span class="grid size-[3.8mm] shrink-0 place-items-center rounded-full bg-gold text-ink"><Check class="size-[2.6mm]" stroke-width={3.2} /></span>
+            {s.title}
+          </li>
+        ))}
+      </ul>
+
+      <div class="mt-auto flex items-center gap-[5mm] rounded-[4mm] bg-night px-[6mm] py-[5mm] text-bone">
+        <div class="flex-1">
+          <p class="font-display text-[14pt] font-bold leading-tight">Gratis offerte &amp; opname</p>
+          <p class="mt-[1mm] text-[7.5pt] text-bone/75">Bel of app ons — reactie binnen 24 uur.</p>
+          <p class="mt-[2.5mm] flex items-center gap-[2mm] font-display text-[17pt] font-bold text-gold-light">
+            <Phone class="size-[5mm]" stroke-width={2.2} />{company.phone}
+          </p>
+        </div>
+        <div class="flex shrink-0 flex-col items-center">
+          <div class="qr size-[24mm] rounded-[2mm] bg-bone p-[1.8mm]" set:html={qrGold} />
+          <p class="mt-[1.5mm] text-[5.8pt] font-bold uppercase tracking-[0.14em] text-gold-light">Scan &amp; app ons</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── Achterkant ─── -->
+  <section class="sheet flex flex-col bg-bone text-ink">
+    <div class="relative bg-night px-[11mm] pb-[8mm] pt-[11mm] text-bone">
+      <div class="blueprint-grid absolute inset-0 opacity-70"></div>
+      <div class="relative">
+        <p class="eyebrow !text-[6.5pt] !text-gold-light">Waarom {company.name}?</p>
+        <h2 class="mt-[2mm] text-[19pt] font-bold leading-tight">Geen groot bedrijf. Wél grote betrokkenheid.</h2>
+        <ul class="mt-[5mm] grid grid-cols-2 gap-[3.5mm]">
+          {usps.map((u) => (
+            <li class="flex gap-[2.5mm]">
+              <span class="grid size-[7mm] shrink-0 place-items-center rounded-[1.8mm] bg-gold text-ink"><u.icon class="size-[4mm]" stroke-width={2} /></span>
+              <span>
+                <span class="block text-[8.2pt] font-bold leading-tight">{u.title}</span>
+                <span class="block text-[7pt] leading-snug text-bone/70">{u.text}</span>
+              </span>
+            </li>
+          ))}
+        </ul>
+      </div>
+    </div>
+
+    <div class="px-[11mm] pt-[6mm]">
+      <p class="eyebrow !text-[6.5pt]">Recent werk</p>
+      <div class="mt-[3mm] grid grid-cols-4 gap-[2mm]">
+        {photos.map((p) => (
+          <Image src={p} width={700} alt="" class="aspect-[3/4] w-full rounded-[2mm] object-cover" />
+        ))}
+      </div>
+
+      <p class="eyebrow mt-[6mm] !text-[6.5pt]">Zo werken wij</p>
+      <ol class="mt-[3mm] grid grid-cols-5 gap-[2mm]">
+        {process.map((s, i) => (
+          <li class="rounded-[2mm] border border-ink/10 bg-white/60 p-[2.2mm]">
+            <span class="font-display text-[13pt] font-extrabold leading-none text-gold">{i + 1}</span>
+            <span class="mt-[1mm] block text-[6.6pt] font-bold leading-tight">{s.title}</span>
+          </li>
+        ))}
+      </ol>
+    </div>
+
+    <div class="mx-[11mm] mb-[9mm] mt-auto flex items-center gap-[5mm] border-t border-ink/10 pt-[5mm]">
+      <Image src={owner} width={300} alt="" class="size-[22mm] shrink-0 rounded-full object-cover object-top" />
+      <div class="min-w-0 flex-1">
+        <p class="font-display text-[12pt] font-bold leading-none">{company.owner}</p>
+        <p class="mt-[1mm] text-[6.2pt] font-bold uppercase tracking-[0.18em] text-gold-deep">Eigenaar</p>
+        <ul class="mt-[2.5mm] space-y-[1.1mm] text-[7.4pt] leading-tight">
+          <li class="flex items-center gap-[1.8mm]"><Phone class="size-[3mm] text-gold-deep" stroke-width={2.2} /><b>{company.phone}</b></li>
+          <li class="flex items-center gap-[1.8mm]"><Mail class="size-[3mm] text-gold-deep" stroke-width={2.2} />{company.email}</li>
+          <li class="flex items-center gap-[1.8mm]"><AtSign class="size-[3mm] text-gold-deep" stroke-width={2.2} />{insta} · Facebook · TikTok</li>
+          <li class="flex items-center gap-[1.8mm]"><MapPin class="size-[3mm] text-gold-deep" stroke-width={2.2} />{company.city} + {company.radiusKm} km · KvK {company.kvk}</li>
+        </ul>
+      </div>
+      <LogoDark class="h-[10mm] w-auto shrink-0 self-start" aria-hidden="true" />
+    </div>
+  </section>
+</Print>

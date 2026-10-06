@@ -1,0 +1,48 @@
+---
+import Base from '../layouts/Base.astro';
+import PageHero from '../components/PageHero.astro';
+import { company } from '../data/site';
+const updated = '5 oktober 2026';
+---
+<Base title="Privacyverklaring" description={`Privacyverklaring van ${company.name}.`} darkTop>
+  <PageHero eyebrow="Privacy" title="Privacyverklaring" intro={`Laatst bijgewerkt: ${updated}`} />
+  <section class="py-20 md:py-28">
+    <div class="container-x">
+      <div class="prose-sultan mx-auto max-w-3xl space-y-10 text-lg text-ink-soft">
+        <div>
+          <h2>Wie zijn wij?</h2>
+          <p>{company.name}, gevestigd in {company.city}, ingeschreven bij de Kamer van Koophandel onder nummer {company.kvk}, is verantwoordelijk voor de verwerking van persoonsgegevens zoals beschreven in deze verklaring. U kunt ons bereiken via <a href={`mailto:${company.email}`}>{company.email}</a> of <a href={company.phoneHref}>{company.phone}</a>.</p>
+        </div>
+        <div>
+          <h2>Welke gegevens verwerken wij?</h2>
+          <p>Wanneer u een offerte aanvraagt of contact met ons opneemt, verwerken wij de gegevens die u zelf invult: naam, telefoonnummer, e-mailadres, plaats of postcode, de omschrijving van uw project en eventueel meegestuurde foto's.</p>
+        </div>
+        <div>
+          <h2>Waarom verwerken wij deze gegevens?</h2>
+          <p>Uitsluitend om contact met u op te nemen, uw aanvraag te beoordelen, een offerte op te stellen en — als u daarvoor kiest — de werkzaamheden uit te voeren. De grondslag hiervoor is uw toestemming en het uitvoeren van (de voorbereiding van) een overeenkomst.</p>
+        </div>
+        <div>
+          <h2>Hoe lang bewaren wij uw gegevens?</h2>
+          <p>Meegestuurde foto's verwijderen wij binnen 30 dagen. Overige gegevens van aanvragen die niet tot een opdracht leiden, bewaren wij maximaal 12 maanden. Gegevens die nodig zijn voor de administratie bewaren wij zo lang als de wet voorschrijft (7 jaar).</p>
+        </div>
+        <div>
+          <h2>Delen met anderen</h2>
+          <p>Wij verkopen uw gegevens nooit. Wij maken alleen gebruik van dienstverleners die nodig zijn om deze website te laten werken (hosting, e-mail en opslag). Met hen zijn afspraken gemaakt over de beveiliging van uw gegevens.</p>
+        </div>
+        <div>
+          <h2>Cookies</h2>
+          <p>Deze website plaatst geen tracking- of advertentiecookies. Er worden alleen technisch noodzakelijke gegevens gebruikt om de website goed te laten werken.</p>
+        </div>
+        <div>
+          <h2>Uw rechten</h2>
+          <p>U heeft het recht om uw gegevens in te zien, te laten corrigeren of te laten verwijderen, en om uw toestemming in te trekken. Stuur hiervoor een e-mail naar <a href={`mailto:${company.email}`}>{company.email}</a>. Heeft u een klacht? Dan kunt u die indienen bij de Autoriteit Persoonsgegevens.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .prose-sultan h2 { font-size: 1.75rem; font-weight: 600; margin-bottom: 0.75rem; color: var(--color-ink); }
+  .prose-sultan a { color: var(--color-ink); font-weight: 600; text-decoration: underline; text-decoration-color: var(--color-gold); text-decoration-thickness: 2px; text-underline-offset: 4px; }
+</style>

@@ -1,0 +1,29 @@
+---
+import { ArrowRight } from '@lucide/astro';
+import ProjectGallery from '../ProjectGallery.astro';
+import { projects } from '../../data/projects';
+
+const highlights = [
+  'Woonkamer met zwevend plafond en LED-lijnen',
+  'Zwevende tv-wand met sfeerverlichting',
+  'Keukenmontage en afwerking',
+  'Klassieke wandpanelen in de gang',
+  'Accentmuur in aubergine',
+  'Voortuin met keramische tegels en hekwerk',
+].map((t) => projects.find((p) => p.title === t)!);
+---
+<section id="projecten" class="py-24 md:py-36">
+  <div class="container-x">
+    <div class="flex flex-col justify-between gap-8 md:flex-row md:items-end">
+      <div class="max-w-2xl">
+        <p class="eyebrow" data-reveal>Ons werk</p>
+        <h2 data-split class="mt-5 text-[clamp(2.2rem,4.6vw,4rem)] font-bold">Het resultaat spreekt voor zich.</h2>
+        <p data-reveal class="mt-6 text-lg text-muted">Een selectie van recent werk: van sfeervolle plafonds en tv-wanden tot vloeren, schilderwerk en buitenwerk.</p>
+      </div>
+      <a data-reveal href="/projecten/" class="btn btn-dark shrink-0">Alle projecten <ArrowRight class="size-4" aria-hidden="true" /></a>
+    </div>
+    <div class="mt-14">
+      <ProjectGallery items={highlights} id="home" />
+    </div>
+  </div>
+</section>

@@ -1,0 +1,104 @@
+---
+import '../styles/global.css';
+import Nav from '../components/Nav.astro';
+import Footer from '../components/Footer.astro';
+import { company, services } from '../data/site';
+
+interface Props {
+  title?: string;
+  description?: string;
+  /** Donkere header bovenaan (voor pagina's met een donkere hero) */
+  darkTop?: boolean;
+  /** Extra structured data (JSON-LD) voor deze pagina */
+  schema?: Record<string, unknown>[];
+  /** Niet laten indexeren door zoekmachines */
+  noindex?: boolean;
+}
+
+const {
+  title,
+  description = `${company.name}: vakkundige renovatie, badkamers, keukens, tegelwerk, schilderwerk en meer. Gevestigd in ${company.city}, actief binnen ${company.radiusKm} km. Gratis offerte.`,
+  darkTop = false,
+  schema = [],
+  noindex = false,
+} = Astro.props;
+
+const fullTitle = title ? `${title} | ${company.name}` : `Renovatie & verbouwing in ${company.city} e.o. | ${company.name}`;
+const ogImage = new URL('/og-image.jpg', Astro.site);
+const canonical = new URL(Astro.url.pathname, Astro.site);
+
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'HomeAndConstructionBusiness',
+  '@id': new URL('/#bedrijf', Astro.site).toString(),
+  name: company.name,
+  logo: new URL('/favicon.svg', Astro.site).toString(),
+  image: ogImage.toString(),
+  priceRange: '€€',
+  identifier: { '@type': 'PropertyValue', propertyID: 'KvK', value: company.kvk },
+  url: Astro.site?.toString(),
+  telephone: '+31630003016',
+  email: company.email,
+  address: { '@type': 'PostalAddress', addressLocality: company.city, addressCountry: 'NL' },
+  areaServed: { '@type': 'GeoCircle', geoMidpoint: { '@type': 'GeoCoordinates', latitude: 52.3676, longitude: 4.9041 }, geoRadius: company.radiusKm * 1000 },
+  openingHoursSpecification: [{
+    '@type': 'OpeningHoursSpecification',
+    dayOfWeek: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'],
+    opens: '09:00', closes: '17:00',
+  }],
+  founder: { '@type': 'Person', name: company.owner },
+  sameAs: Object.values(company.socials).filter(Boolean),
+  makesOffer: services.map((s) => ({ '@type': 'Offer', itemOffered: { '@type': 'Service', name: s.title } })),
+};
+---
+<!doctype html>
+<html lang="nl">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>{fullTitle}</title>
+  <meta name="description" content={description} />
+  <link rel="canonical" href={canonical} />
+  <meta name="theme-color" content="#1c1a18" />
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+  {noindex && <meta name="robots" content="noindex, nofollow" />}
+
+  <meta property="og:type" content="website" />
+  <meta property="og:locale" content="nl_NL" />
+  <meta property="og:site_name" content={company.name} />
+  <meta property="og:title" content={fullTitle} />
+  <meta property="og:description" content={description} />
+  <meta property="og:url" content={canonical} />
+  <meta property="og:image" content={ogImage} />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:image" content={ogImage} />
+
+  <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
+  {schema.map((s) => <script type="application/ld+json" set:html={JSON.stringify({ '@context': 'https://schema.org', ...s })} />)}
+
+  <!-- Markeer dat JS draait; als animaties niet binnen 4s starten, toon alles alsnog -->
+  <script is:inline>
+    document.documentElement.classList.add('js');
+    setTimeout(function () {
+      if (!document.documentElement.classList.contains('motion-ready')) {
+        document.documentElement.classList.add('motion-fallback');
+      }
+    }, 4000);
+  </script>
+</head>
+<body class="bg-bone text-ink">
+  <a href="#main" class="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[200] focus:rounded-full focus:bg-ink focus:px-5 focus:py-3 focus:text-bone">
+    Naar de inhoud
+  </a>
+  <Nav darkTop={darkTop} />
+  <main id="main">
+    <slot />
+  </main>
+  <Footer />
+  <script>
+    import '../scripts/motion';
+  </script>
+</body>
+</html>

@@ -1,0 +1,169 @@
+---
+import { Picture, getImage } from 'astro:assets';
+import { X, ChevronLeft, ChevronRight, Expand } from '@lucide/astro';
+import type { Project } from '../data/projects';
+
+interface Props {
+  items: Project[];
+  /** Toon filterknoppen per categorie */
+  filter?: boolean;
+  id?: string;
+}
+const { items, filter = false, id = 'gallery' } = Astro.props;
+
+const large = await Promise.all(items.map((p) => getImage({ src: p.image, width: 1600, format: 'webp' })));
+const cats = [...new Set(items.map((p) => p.category))];
+---
+<div class="gallery" data-gallery={id}>
+  {filter && (
+    <div class="mb-10 flex flex-wrap gap-2" role="group" aria-label="Filter projecten">
+      <button type="button" data-filter="all" aria-pressed="true" class="filter-btn">Alles <span class="opacity-60">({items.length})</span></button>
+      {cats.map((c) => (
+        <button type="button" data-filter={c} aria-pressed="false" class="filter-btn">{c} <span class="opacity-60">({items.filter((p) => p.category === c).length})</span></button>
+      ))}
+    </div>
+  )}
+
+  <ul class="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+    {items.map((p, i) => (
+      <li data-reveal data-category={p.category}>
+        <button
+          type="button"
+          data-open={i}
+          data-src={large[i].src}
+          data-title={p.title}
+          data-category={p.category}
+          data-alt={p.alt}
+          class="group relative block aspect-[4/5] w-full overflow-hidden rounded-3xl bg-sand text-left"
+          aria-label={`Bekijk foto: ${p.title}`}
+        >
+          <Picture
+            src={p.image}
+            formats={['avif', 'webp']}
+            widths={[400, 640, 900]}
+            sizes="(min-width: 1024px) 30vw, (min-width: 640px) 46vw, 92vw"
+            alt={p.alt}
+            pictureAttributes={{ class: 'block h-full [&>img]:h-full [&>img]:w-full [&>img]:object-cover [&>img]:transition-transform [&>img]:duration-[1.2s] [&>img]:ease-[var(--ease-out-expo)] group-hover:[&>img]:scale-[1.06]' }}
+          />
+          <span class="absolute inset-0 bg-gradient-to-t from-night/85 via-night/10 to-transparent opacity-80 transition-opacity duration-500 group-hover:opacity-100" aria-hidden="true"></span>
+          <span class="absolute inset-x-0 bottom-0 flex items-end justify-between gap-4 p-5 text-bone sm:p-6">
+            <span class="translate-y-1 transition-transform duration-500 ease-[var(--ease-out-expo)] group-hover:translate-y-0">
+              <span class="block text-xs font-bold uppercase tracking-[0.16em] text-gold-light">{p.category}</span>
+              <span class="mt-1 block font-display text-xl font-semibold leading-tight">{p.title}</span>
+            </span>
+            <span class="grid size-10 shrink-0 scale-75 place-items-center rounded-full bg-gold text-ink opacity-0 transition-all duration-500 ease-[var(--ease-out-expo)] group-hover:scale-100 group-hover:opacity-100 group-focus-visible:scale-100 group-focus-visible:opacity-100" aria-hidden="true">
+              <Expand class="size-4" />
+            </span>
+          </span>
+        </button>
+      </li>
+    ))}
+  </ul>
+
+  <dialog class="lightbox m-0 h-full max-h-none w-full max-w-none bg-night/95 p-0 text-bone backdrop:bg-transparent" aria-label="Projectfoto">
+    <div class="flex h-full flex-col">
+      <div class="flex items-center justify-between gap-4 px-4 py-4 sm:px-8">
+        <p class="text-sm font-semibold text-bone/60" data-counter aria-live="polite"></p>
+        <button type="button" data-close class="grid size-12 place-items-center rounded-full border border-white/15 transition-colors hover:bg-white/10" aria-label="Sluiten"><X class="size-5" /></button>
+      </div>
+      <div class="relative flex min-h-0 flex-1 items-center justify-center px-4 sm:px-20">
+        <img data-image alt="" class="max-h-full max-w-full rounded-2xl object-contain shadow-2xl" />
+        <button type="button" data-prev class="absolute left-2 top-1/2 grid size-12 -translate-y-1/2 place-items-center rounded-full bg-white/10 backdrop-blur transition-colors hover:bg-gold hover:text-ink sm:left-6" aria-label="Vorige foto"><ChevronLeft class="size-6" /></button>
+        <button type="button" data-next class="absolute right-2 top-1/2 grid size-12 -translate-y-1/2 place-items-center rounded-full bg-white/10 backdrop-blur transition-colors hover:bg-gold hover:text-ink sm:right-6" aria-label="Volgende foto"><ChevronRight class="size-6" /></button>
+      </div>
+      <div class="px-4 py-6 text-center sm:px-8">
+        <p class="text-xs font-bold uppercase tracking-[0.16em] text-gold-light" data-cat></p>
+        <p class="mt-1 font-display text-2xl font-semibold" data-title></p>
+      </div>
+    </div>
+  </dialog>
+</div>
+
+<style>
+  .filter-btn {
+    min-height: 2.75rem;
+    border-radius: 999px;
+    border: 1.5px solid rgb(28 26 24 / 0.15);
+    padding: 0.5rem 1.1rem;
+    font-size: 0.9rem;
+    font-weight: 700;
+    transition: background-color 0.3s, color 0.3s, border-color 0.3s;
+  }
+  .filter-btn:hover { border-color: rgb(28 26 24 / 0.4); }
+  .filter-btn[aria-pressed='true'] { background: var(--color-ink); color: var(--color-bone); border-color: var(--color-ink); }
+  .lightbox[open] { animation: lb-in 0.4s cubic-bezier(0.16, 1, 0.3, 1); }
+  @keyframes lb-in { from { opacity: 0; } }
+  @media (prefers-reduced-motion: reduce) { .lightbox[open] { animation: none; } }
+</style>
+
+<script>
+  document.querySelectorAll<HTMLElement>('[data-gallery]').forEach((gallery) => {
+    const dialog = gallery.querySelector('dialog')!;
+    const img = dialog.querySelector<HTMLImageElement>('[data-image]')!;
+    const title = dialog.querySelector('[data-title]')!;
+    const cat = dialog.querySelector('[data-cat]')!;
+    const counter = dialog.querySelector('[data-counter]')!;
+    const all = Array.from(gallery.querySelectorAll<HTMLButtonElement>('[data-open]'));
+    let visible = all;
+    let index = 0;
+    let opener: HTMLElement | null = null;
+
+    const show = (i: number) => {
+      index = (i + visible.length) % visible.length;
+      const b = visible[index];
+      img.src = b.dataset.src!;
+      img.alt = b.dataset.alt!;
+      title.textContent = b.dataset.title!;
+      cat.textContent = b.dataset.category!;
+      counter.textContent = `${index + 1} / ${visible.length}`;
+      if (!matchMedia('(prefers-reduced-motion: reduce)').matches) {
+        img.animate([{ opacity: 0, transform: 'scale(.97)' }, { opacity: 1, transform: 'none' }], { duration: 450, easing: 'cubic-bezier(.16,1,.3,1)' });
+      }
+    };
+
+    all.forEach((b) => b.addEventListener('click', () => {
+      opener = b;
+      visible = all.filter((x) => !x.closest('li')!.hidden);
+      show(visible.indexOf(b));
+      dialog.showModal();
+      window.dispatchEvent(new CustomEvent('scroll-lock'));
+    }));
+    dialog.addEventListener('close', () => {
+      window.dispatchEvent(new CustomEvent('scroll-unlock'));
+      opener?.focus();
+    });
+    dialog.querySelector('[data-close]')!.addEventListener('click', () => dialog.close());
+    dialog.querySelector('[data-prev]')!.addEventListener('click', () => show(index - 1));
+    dialog.querySelector('[data-next]')!.addEventListener('click', () => show(index + 1));
+    dialog.addEventListener('keydown', (e) => {
+      if (e.key === 'ArrowLeft') show(index - 1);
+      if (e.key === 'ArrowRight') show(index + 1);
+    });
+    // Klik naast de foto sluit
+    dialog.addEventListener('click', (e) => { if (e.target === dialog || (e.target as HTMLElement).classList.contains('flex-1')) dialog.close(); });
+    // Swipen op mobiel
+    let startX = 0;
+    dialog.addEventListener('touchstart', (e) => { startX = e.touches[0].clientX; }, { passive: true });
+    dialog.addEventListener('touchend', (e) => {
+      const dx = e.changedTouches[0].clientX - startX;
+      if (Math.abs(dx) > 50) show(index + (dx < 0 ? 1 : -1));
+    });
+
+    // Filters
+    const buttons = Array.from(gallery.querySelectorAll<HTMLButtonElement>('[data-filter]'));
+    buttons.forEach((btn) => btn.addEventListener('click', () => {
+      const f = btn.dataset.filter!;
+      buttons.forEach((b) => b.setAttribute('aria-pressed', String(b === btn)));
+      gallery.querySelectorAll<HTMLLIElement>('li[data-category]').forEach((li) => {
+        const match = f === 'all' || li.dataset.category === f;
+        li.hidden = !match;
+        if (match && !matchMedia('(prefers-reduced-motion: reduce)').matches) {
+          li.style.opacity = '1';
+          li.style.transform = 'none';
+          li.animate([{ opacity: 0, transform: 'translateY(16px)' }, { opacity: 1, transform: 'none' }], { duration: 500, easing: 'cubic-bezier(.16,1,.3,1)' });
+        }
+      });
+      window.dispatchEvent(new Event('resize'));
+    }));
+  });
+</script>

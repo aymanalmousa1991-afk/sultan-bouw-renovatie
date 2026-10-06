@@ -1,6 +1,7 @@
 const multer = require('multer');
 const path = require('path');
 const fs = require('fs');
+const os = require('os');
 
 /**
  * File Service
@@ -8,7 +9,7 @@ const fs = require('fs');
  */
 class FileService {
   constructor() {
-    this.uploadDir = process.env.UPLOAD_DIR || path.join(__dirname, '../../uploads');
+    this.uploadDir = process.env.UPLOAD_DIR || path.join(os.tmpdir(), 'sultan-uploads');
     this.maxSize = (parseInt(process.env.MAX_FILE_SIZE_MB) || 10) * 1024 * 1024; // 10MB default
     this.allowedTypes = ['image/jpeg', 'image/png', 'image/heic', 'image/heif', 'image/webp'];
     this._ensureUploadDir();
@@ -66,10 +67,11 @@ class FileService {
   }
 
   /**
-   * Verwijder oude uploads (ouder dan 7 dagen)
+   * Vangnet: verwijder achtergebleven uploads ouder dan 1 dag
+   * (normaal worden ze direct na het versturen van de e-mail verwijderd)
    */
   cleanOldUploads() {
-    const sevenDays = 7 * 24 * 60 * 60 * 1000;
+    const maxAge = 24 * 60 * 60 * 1000;
     const now = Date.now();
 
     if (!fs.existsSync(this.uploadDir)) return;
@@ -80,7 +82,7 @@ class FileService {
         const filePath = path.join(this.uploadDir, file);
         fs.stat(filePath, (err, stats) => {
           if (err) return;
-          if (now - stats.mtimeMs > sevenDays) {
+          if (now - stats.mtimeMs > maxAge) {
             fs.unlink(filePath, err => {
               if (!err) console.log(`[FileService] Oude upload verwijderd: ${file}`);
             });

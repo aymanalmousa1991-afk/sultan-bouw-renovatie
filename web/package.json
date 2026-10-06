@@ -1,0 +1,26 @@
+{
+  "name": "sultan-bouw-web",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "node node_modules/astro/bin/astro.mjs dev",
+    "build": "node node_modules/astro/bin/astro.mjs build",
+    "preview": "node node_modules/astro/bin/astro.mjs preview"
+  },
+  "dependencies": {
+    "@astrojs/sitemap": "^3.7.4",
+    "@fontsource-variable/bricolage-grotesque": "^5.3.0",
+    "@fontsource-variable/manrope": "^5.3.0",
+    "@lucide/astro": "^1.52.0",
+    "@tailwindcss/vite": "^4.3.3",
+    "astro": "^7.3.5",
+    "gsap": "^3.15.0",
+    "lenis": "^1.3.26",
+    "tailwindcss": "^4.3.3"
+  },
+  "devDependencies": {
+    "puppeteer-core": "^25.12.0",
+    "qrcode": "^1.5.4"
+  }
+}

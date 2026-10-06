@@ -1,0 +1,16 @@
+---
+import HorizontalDark from '../assets/brand/logo-horizontal-dark.svg';
+import HorizontalLight from '../assets/brand/logo-horizontal-light.svg';
+import StackedLight from '../assets/brand/logo-light.svg';
+
+interface Props {
+  tone?: 'dark' | 'light';
+  /** horizontal: navigatie · stacked: beeldmerk boven de tekst (footer) */
+  variant?: 'horizontal' | 'stacked';
+  class?: string;
+}
+const { tone = 'dark', variant = 'horizontal', class: className } = Astro.props;
+const Svg = variant === 'stacked' ? StackedLight : tone === 'light' ? HorizontalLight : HorizontalDark;
+const size = variant === 'stacked' ? 'h-28 w-auto' : 'h-12 w-auto sm:h-14';
+---
+<Svg class:list={[size, className]} role="img" aria-label="Sultan Bouw & Renovatie" />

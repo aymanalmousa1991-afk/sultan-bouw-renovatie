@@ -1,0 +1,18 @@
+---
+import { stats } from '../../data/site';
+---
+<section class="on-dark grain relative overflow-hidden bg-night py-20 text-bone md:py-28">
+  <div class="blueprint-grid absolute inset-0 opacity-50" aria-hidden="true"></div>
+  <div class="container-x relative">
+    <dl class="grid grid-cols-2 gap-x-6 gap-y-12 lg:grid-cols-4">
+      {stats.map((s) => (
+        <div data-reveal class="flex flex-col border-l border-white/15 pl-6">
+          <dt class="order-2 mt-3 text-sm font-semibold uppercase tracking-[0.12em] text-bone/65">{s.label}</dt>
+          <dd class="order-1 font-display text-[clamp(2.8rem,6vw,5rem)] font-bold leading-none tracking-tight">
+            <span data-count={s.value}>{s.value}</span><span class="text-gold-light">{s.suffix}</span>
+          </dd>
+        </div>
+      ))}
+    </dl>
+  </div>
+</section>

@@ -1,5 +1,5 @@
 # fly.toml voor Sultan Bouw & Renovatie Backend
-app = "sultan-bouw-api"
+app = "sultan-bouw-renovatie"
 primary_region = "fra"
 
 [http_service]

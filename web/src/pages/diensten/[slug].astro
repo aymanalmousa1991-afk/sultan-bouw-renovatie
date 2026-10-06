@@ -1,0 +1,122 @@
+---
+import { ArrowLeft, ArrowRight, Check, Phone } from '@lucide/astro';
+import Base from '../../layouts/Base.astro';
+import PageHero from '../../components/PageHero.astro';
+import ServiceIcon from '../../components/ServiceIcon.astro';
+import CtaBand from '../../components/CtaBand.astro';
+import ProjectGallery from '../../components/ProjectGallery.astro';
+import { projectsForService } from '../../data/projects';
+import { services, company, areas, type Service } from '../../data/site';
+
+export function getStaticPaths() {
+  return services.map((service, i) => ({
+    params: { slug: service.slug },
+    props: { service, next: services[(i + 1) % services.length] },
+  }));
+}
+
+interface Props { service: Service; next: Service }
+const { service, next } = Astro.props;
+const work = projectsForService(service.slug);
+const pageUrl = new URL(`/diensten/${service.slug}/`, Astro.site).toString();
+const schema = [
+  {
+    '@type': 'Service',
+    name: service.title,
+    serviceType: service.title,
+    description: service.intro,
+    url: pageUrl,
+    provider: { '@id': new URL('/#bedrijf', Astro.site).toString() },
+    areaServed: areas.map((a) => ({ '@type': 'City', name: a })),
+  },
+  {
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: 'Home', item: new URL('/', Astro.site).toString() },
+      { '@type': 'ListItem', position: 2, name: 'Diensten', item: new URL('/diensten/', Astro.site).toString() },
+      { '@type': 'ListItem', position: 3, name: service.title, item: pageUrl },
+    ],
+  },
+];
+const others = services.filter((s) => s.slug !== service.slug).slice(0, 6);
+---
+<Base
+  title={`${service.title} in ${company.city} e.o.`}
+  description={`${service.title} door ${company.name}. ${service.short} Actief in ${company.city} en tot ${company.radiusKm} km daarbuiten. Gratis offerte.`}
+  darkTop
+  schema={schema}
+>
+  <PageHero eyebrow={`Diensten · ${service.title}`} title={service.title} intro={service.short}>
+    <a slot="before" href="/diensten/" class="mb-10 inline-flex items-center gap-2 text-sm font-semibold text-bone/70 transition-colors hover:text-gold-light">
+      <ArrowLeft class="size-4" aria-hidden="true" /> Alle diensten
+    </a>
+    <div data-reveal class="mt-10 flex flex-wrap gap-3">
+      <a href={`/offerte/?dienst=${service.slug}`} class="btn btn-primary" data-magnetic>Offerte voor {service.title.toLowerCase()} <ArrowRight class="size-4" aria-hidden="true" /></a>
+      <a href={company.phoneHref} class="btn btn-ghost"><Phone class="size-4" aria-hidden="true" /> {company.phone}</a>
+    </div>
+  </PageHero>
+
+  <section class="py-24 md:py-32">
+    <div class="container-x grid gap-16 lg:grid-cols-12">
+      <div class="lg:col-span-7">
+        <span data-reveal class="grid size-16 place-items-center rounded-2xl bg-gold/15 text-gold-deep">
+          <ServiceIcon name={service.icon} class="size-8" />
+        </span>
+        <p data-reveal class="mt-8 text-[clamp(1.35rem,2.2vw,1.75rem)] font-medium leading-snug text-ink-soft">{service.intro}</p>
+        <h2 data-reveal class="mt-12 text-2xl font-semibold">{service.title} in {company.city} en omgeving</h2>
+        <p data-reveal class="mt-3 text-lg text-muted">
+          Wij voeren {service.title.toLowerCase()} uit in heel {company.city} en tot {company.radiusKm}&nbsp;km daarbuiten, onder andere in {areas.slice(1, 8).join(', ')} en {areas[8]}.
+          U krijgt altijd een gratis opname op locatie, een heldere prijs vooraf en één vast aanspreekpunt: eigenaar {company.owner}.
+        </p>
+      </div>
+      <div class="lg:col-span-4 lg:col-start-9">
+        <div data-reveal class="rounded-[2rem] bg-sand/70 p-8">
+          <h2 class="text-2xl font-semibold">Wat we voor u doen</h2>
+          <ul class="mt-6 space-y-4">
+            {service.includes.map((item) => (
+              <li class="flex gap-3">
+                <span class="mt-0.5 grid size-6 shrink-0 place-items-center rounded-full bg-gold text-ink"><Check class="size-3.5" stroke-width={3} aria-hidden="true" /></span>
+                {item}
+              </li>
+            ))}
+          </ul>
+          <p class="mt-8 border-t border-ink/10 pt-6 text-sm text-muted">Gratis opname op locatie en een heldere prijs vooraf.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  {work.length > 0 && (
+    <section class="pb-24 md:pb-32">
+      <div class="container-x">
+        <p class="eyebrow" data-reveal>Uit ons portfolio</p>
+        <h2 data-split class="mt-5 mb-12 text-[clamp(2rem,4vw,3.25rem)] font-bold">Recent werk</h2>
+        <ProjectGallery items={work} id={`dienst-${service.slug}`} />
+      </div>
+    </section>
+  )}
+
+  <section class="bg-sand/60 py-24 md:py-32">
+    <div class="container-x">
+      <div class="flex flex-wrap items-end justify-between gap-6">
+        <h2 data-split class="text-[clamp(2rem,4vw,3.25rem)] font-bold">Andere diensten</h2>
+        <a data-reveal href={`/diensten/${next.slug}/`} class="inline-flex items-center gap-2 font-bold text-gold-deep hover:underline">
+          Volgende: {next.title} <ArrowRight class="size-4" aria-hidden="true" />
+        </a>
+      </div>
+      <ul class="mt-12 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+        {others.map((s) => (
+          <li data-reveal>
+            <a href={`/diensten/${s.slug}/`} class="group flex items-center gap-4 rounded-2xl border border-ink/10 bg-bone p-5 transition-[transform,box-shadow] duration-500 ease-[var(--ease-out-expo)] hover:-translate-y-1 hover:shadow-xl hover:shadow-night/10">
+              <span class="grid size-12 shrink-0 place-items-center rounded-xl bg-gold/15 text-gold-deep transition-colors group-hover:bg-gold group-hover:text-ink"><ServiceIcon name={s.icon} /></span>
+              <span class="font-display text-lg font-semibold">{s.title}</span>
+              <ArrowRight class="ml-auto size-4 text-ink/30 transition-[transform,color] group-hover:translate-x-1 group-hover:text-ink" aria-hidden="true" />
+            </a>
+          </li>
+        ))}
+      </ul>
+    </div>
+  </section>
+
+  <div class="pt-24 md:pt-36"><CtaBand title={`Interesse in ${service.title.toLowerCase()}?`} /></div>
+</Base>

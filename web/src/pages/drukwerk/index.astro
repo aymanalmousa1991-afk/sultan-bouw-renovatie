@@ -1,0 +1,64 @@
+---
+import { Download, Eye, Info } from '@lucide/astro';
+import Base from '../../layouts/Base.astro';
+import PageHero from '../../components/PageHero.astro';
+import { company } from '../../data/site';
+
+const items = [
+  {
+    title: 'Visitekaartje',
+    size: '85 × 55 mm · dubbelzijdig',
+    pdf: '/downloads/sultan-bouw-visitekaartje.pdf',
+    sides: [
+      { src: '/downloads/visitekaartje-voorkant.jpg', label: 'Voorkant', w: 966, h: 624 },
+      { src: '/downloads/visitekaartje-achterkant.jpg', label: 'Achterkant', w: 966, h: 624 },
+    ],
+  },
+  {
+    title: 'Flyer',
+    size: 'A5 (148 × 210 mm) · dubbelzijdig',
+    pdf: '/downloads/sultan-bouw-flyer-a5.pdf',
+    sides: [
+      { src: '/downloads/flyer-voorkant.jpg', label: 'Voorkant', w: 1680, h: 2382 },
+      { src: '/downloads/flyer-achterkant.jpg', label: 'Achterkant', w: 1680, h: 2382 },
+    ],
+  },
+];
+---
+<Base title="Flyer & visitekaartje" description={`Bekijk en download de flyer en het visitekaartje van ${company.name}.`} darkTop>
+  <PageHero eyebrow="Drukwerk" title="Flyer & visitekaartje" intro="Bekijk ons drukwerk of download de PDF om te delen of te laten drukken." />
+
+  <section class="py-20 md:py-28">
+    <div class="container-x space-y-24">
+      {items.map((item) => (
+        <article>
+          <div class="flex flex-wrap items-end justify-between gap-6">
+            <div>
+              <h2 data-split class="text-[clamp(2rem,4vw,3.25rem)] font-bold">{item.title}</h2>
+              <p data-reveal class="mt-2 text-muted">{item.size}</p>
+            </div>
+            <div data-reveal class="flex flex-wrap gap-3">
+              <a href={item.pdf} target="_blank" rel="noopener" class="btn btn-ghost"><Eye class="size-4" aria-hidden="true" /> Bekijken</a>
+              <a href={item.pdf} download class="btn btn-primary"><Download class="size-4" aria-hidden="true" /> Download PDF</a>
+            </div>
+          </div>
+          <div class:list={['mt-10 grid grid-cols-1 gap-6 sm:grid-cols-2', item.title === 'Flyer' && 'mx-auto max-w-4xl']}>
+            {item.sides.map((side) => (
+              <figure data-reveal>
+                <a href={side.src} target="_blank" rel="noopener" class="group block overflow-hidden rounded-2xl shadow-2xl shadow-night/20 ring-1 ring-ink/10">
+                  <img src={side.src} alt={`${item.title} — ${side.label.toLowerCase()}`} width={side.w} height={side.h} loading="lazy" class="h-auto w-full transition-transform duration-700 ease-[var(--ease-out-expo)] group-hover:scale-[1.02]" />
+                </a>
+                <figcaption class="mt-3 text-sm font-semibold text-muted">{side.label}</figcaption>
+              </figure>
+            ))}
+          </div>
+        </article>
+      ))}
+
+      <aside data-reveal class="flex gap-4 rounded-3xl bg-sand/70 p-6 text-sm text-muted sm:p-8">
+        <Info class="mt-0.5 size-5 shrink-0 text-gold-deep" aria-hidden="true" />
+        <p>De PDF's zijn drukklaar met 3 mm afloop rondom. De QR-code opent direct een WhatsApp-gesprek met {company.owner}.</p>
+      </aside>
+    </div>
+  </section>
+</Base>

@@ -1,0 +1,23 @@
+---
+import { ArrowRight, Phone, MessageCircle } from '@lucide/astro';
+import { company } from '../data/site';
+
+interface Props { title?: string }
+const { title = 'Klaar om uw plannen waar te maken?' } = Astro.props;
+---
+<section class="pb-24 md:pb-36">
+  <div class="container-x">
+    <div data-reveal class="grain relative overflow-hidden rounded-[2.5rem] bg-gold px-6 py-16 text-ink sm:px-12 md:px-20 md:py-24">
+      <div class="absolute -right-24 -top-24 size-96 rounded-full border-[3rem] border-ink/[0.06]" aria-hidden="true"></div>
+      <div class="relative max-w-3xl">
+        <h2 data-split class="text-[clamp(2.4rem,5.4vw,4.75rem)] font-bold">{title}</h2>
+        <p class="mt-6 max-w-xl text-lg text-ink/80">Vraag vrijblijvend een offerte aan. We reageren binnen 24 uur en komen gratis bij u langs.</p>
+        <div class="mt-10 flex flex-wrap gap-3">
+          <a href="/offerte/" class="btn btn-dark" data-magnetic>Gratis offerte aanvragen <ArrowRight class="size-4" aria-hidden="true" /></a>
+          <a href={company.phoneHref} class="btn btn-ghost"><Phone class="size-4" aria-hidden="true" /> Bel direct</a>
+          <a href={company.whatsappHref} target="_blank" rel="noopener noreferrer" class="btn btn-ghost"><MessageCircle class="size-4" aria-hidden="true" /> WhatsApp</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

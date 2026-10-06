@@ -1,0 +1,18 @@
+---
+import { Sparkles } from '@lucide/astro';
+import { services } from '../../data/site';
+const items = services.map((s) => s.title);
+---
+<div class="marquee relative overflow-hidden border-y border-ink/10 bg-gold py-5 text-ink" aria-hidden="true">
+  <div class="marquee-track flex w-max">
+    {[0, 1].map(() => (
+      <ul class="flex shrink-0 items-center">
+        {items.map((t) => (
+          <li class="flex items-center gap-6 px-6 font-display text-2xl font-semibold tracking-tight whitespace-nowrap md:text-3xl">
+            {t}<Sparkles class="size-5" stroke-width={1.8} />
+          </li>
+        ))}
+      </ul>
+    ))}
+  </div>
+</div>

@@ -1,0 +1,24 @@
+---
+import { Image } from 'astro:assets';
+import Print from '../../../layouts/Print.astro';
+import LogoHorizontal from '../../../assets/brand/logo-horizontal-light.svg';
+import { company } from '../../../data/site';
+import photo from '../../../assets/projects/plafond-led-lijnen-tv-wand.jpg';
+// Deelafbeelding voor WhatsApp/Facebook/Google (1200 × 630 px)
+---
+<Print title="OG" width="1200px" height="630px">
+  <section class="sheet flex bg-night text-bone">
+    <div class="blueprint-grid absolute inset-0"></div>
+    <div class="relative flex w-[58%] flex-col justify-between p-[64px]">
+      <LogoHorizontal class="h-[64px] w-auto self-start" />
+      <div>
+        <p class="text-[17px] font-bold uppercase tracking-[0.28em] text-gold-light">Bouw &amp; Renovatie · {company.city} e.o.</p>
+        <p class="mt-4 font-display text-[64px] font-bold leading-[1]">Vakwerk dat uw huis <span class="text-gold-light">thuis</span> maakt.</p>
+        <p class="mt-6 text-[22px] text-bone/75">Gratis offerte · {company.phone}</p>
+      </div>
+    </div>
+    <div class="relative flex-1 p-[28px] pl-0">
+      <Image src={photo} width={1000} alt="" class="h-full w-full rounded-[28px] object-cover" />
+    </div>
+  </section>
+</Print>

@@ -22,3 +22,7 @@ desktop.ini
 # Scripts (tijdelijke fix scripts)
 fix-*.js
 check-labels.js
+
+# Builds
+web/dist/
+web/.astro/

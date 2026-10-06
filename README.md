@@ -1,108 +1,56 @@
-# 🦅 Gouden Adelaar – Bouw & Renovatie Website
+# Sultan Bouw & Renovatie
 
-Professionele website voor **Gouden Adelaar**, een Nederlands bouw- en renovatiebedrijf.
+Website en API van **Sultan Bouw & Renovatie** — renovatiebedrijf in Amsterdam, actief tot 60 km daarbuiten.
 
-## 🚀 Features
-
-- Responsief design (desktop, tablet, mobiel)
-- Dynamische hero-slideshow met parallax-effect
-- Interactieve projectengalerij met filter & lightbox
-- Review-systeem met sterbeoordeling
-- Offerte-aanvraagformulier met foto-upload
-- Contactformulier met e-mail notificaties
-- Rate limiting, input validatie & sanitatie
-- Productie-grade Express backend
-
-## 📁 Projectstructuur
+## Opbouw
 
 ```
-gouden-adelaar/
-├── public/              # Frontend (statische bestanden)
-│   ├── index.html       # Hoofdpagina
-│   ├── css/style.css    # Stylesheet
-│   ├── js/main.js       # JavaScript
-│   ├── img/             # Afbeeldingen
-│   └── favicon/         # Favicon bestanden
-├── server/              # Backend
-│   ├── index.js         # Express server entrypoint
-│   ├── package.json     # Server dependencies
-│   ├── routes/          # API routes
-│   ├── controllers/     # Request handlers
-│   ├── services/        # Business logic
-│   └── middleware/       # Express middleware
-├── package.json         # Root config
-└── README.md            # Dit bestand
+web/      Website (Astro + Tailwind CSS + GSAP/Lenis animaties)
+  src/data/site.ts   ← alle bedrijfsgegevens, diensten, cijfers en FAQ op één plek
+  src/pages/         ← pagina's (home, diensten, offerte, contact, privacy, 404)
+  src/components/    ← onderdelen van de pagina's
+server/   Express API: offerte- en contactformulier, reviews (MongoDB + Gmail SMTP)
 ```
 
-## 🛠️ Installatie
+De server serveert in productie de gebouwde website (`web/dist`) én de API op hetzelfde domein.
 
-### Vereisten
-- Node.js 18+ 
-- npm 9+
-
-### Stappen
+## Lokaal draaien
 
 ```bash
-# 1. Clone de repository
-git clone https://github.com/jouw-org/gouden-adelaar.git
-cd gouden-adelaar
-
-# 2. Installeer server dependencies
-cd server
-npm install
-
-# 3. Maak een .env bestand aan
-cp .env.example .env
-# Vul de omgevingsvariabelen in (zie .env.example)
-
-# 4. Start de server
-cd ..
-npm run dev    # Ontwikkelmodus (met nodemon)
-# of
-npm start      # Productiemodus
+npm run setup                  # dependencies installeren
+cp server/env.example.txt server/.env   # en invullen
+npm run build                  # website bouwen
+npm start                      # http://localhost:3000
 ```
 
-De website is dan bereikbaar op **http://localhost:3000**
-
-## 🌐 Productie Deployment
-
-Voor productie kun je de server draaien met procesmanager PM2:
+Tijdens het ontwikkelen aan de website (met live herladen):
 
 ```bash
-npm install -g pm2
-pm2 start server/index.js --name gouden-adelaar
-pm2 save
-pm2 startup
+npm run dev:server   # API op :3000
+npm run dev:web      # website op :4321 (API-calls gaan via proxy naar :3000)
 ```
 
-Of gebruik een Docker container / deploy naar diensten als Railway, Render, of een VPS.
+> Let op: door het `&`-teken in de mapnaam werken `npx`/`.bin`-commando's op Windows niet.
+> De scripts in `web/package.json` roepen Astro daarom direct via `node` aan.
 
-## 📧 Email Configuratie
-
-Het contactformulier gebruikt **Nodemailer** voor e-mail notificaties.
-Configureer in `server/.env`:
-
-```
-EMAIL_HOST=smtp.ziggo.nl
-EMAIL_PORT=465
-EMAIL_USER=your-email@ziggo.nl
-EMAIL_PASS=your-password
-NOTIFICATION_EMAIL=uw@email.nl
-```
-
-## ⚙️ API Endpoints
+## API
 
 | Endpoint | Methode | Beschrijving |
-|----------|---------|-------------|
-| `/api/offerte` | POST | Offerte aanvraag met optionele bestanden |
-| `/api/contact` | POST | Contactformulier versturen |
-| `/api/review` | POST | Review plaatsen |
+|---|---|---|
+| `/api/offerte` | POST (multipart) | Offerte-aanvraag met max. 5 foto's |
+| `/api/contact` | POST (JSON) | Contactbericht |
+| `/api/review` | POST (JSON) | Review (pas zichtbaar na goedkeuring via de links in de e-mail) |
+| `/api/reviews/:id/approve` · `/delete` | GET/POST | Goedkeuren of verwijderen (ondertekende link) |
+| `/api/reviews` | GET | Goedgekeurde reviews |
 | `/api/health` | GET | Healthcheck |
 
-## 📄 Licentie
+Klanten kunnen een review achterlaten via `/review/` (deel die link na een klus).
 
-MIT License – vrij te gebruiken en aan te passen.
+Aanvragen worden gemaild naar `NOTIFICATION_EMAIL` (met foto's als bijlage) en — als er een database is — ook bewaard in MongoDB (`leads`).
 
----
+## Deployen (Fly.io)
 
-Gemaakt met ❤️ voor Gouden Adelaar Bouw & Renovatie
+```bash
+fly secrets set MONGODB_URI=... SMTP_HOST=smtp.gmail.com SMTP_PORT=465 SMTP_USER=... SMTP_PASS=... NOTIFICATION_EMAIL=... REVIEW_SECRET=... PUBLIC_URL=...
+fly deploy
+```

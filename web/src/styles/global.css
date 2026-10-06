@@ -1,0 +1,186 @@
+@import "tailwindcss";
+@import "@fontsource-variable/bricolage-grotesque";
+@import "@fontsource-variable/manrope";
+
+/* ─── Design tokens ─────────────────────────────────── */
+@theme {
+  --color-bone: #f6f3ee;
+  --color-sand: #ebe5da;
+  --color-ink: #1c1a18;
+  --color-ink-soft: #3a3632;
+  --color-muted: #625c55;
+  --color-night: #161412;
+  --color-night-2: #2a2520;
+  --color-stone: #a69c8e;
+  --color-gold: #b58849;
+  --color-gold-light: #d4a865;
+  --color-gold-deep: #8a6532;
+
+  --font-display: "Bricolage Grotesque Variable", ui-sans-serif, system-ui, sans-serif;
+  --font-sans: "Manrope Variable", ui-sans-serif, system-ui, sans-serif;
+
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-in-out-quart: cubic-bezier(0.76, 0, 0.24, 1);
+}
+
+/* ─── Base ──────────────────────────────────────────── */
+@layer base {
+  html {
+    background: var(--color-bone);
+    color: var(--color-ink);
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+  body {
+    font-family: var(--font-sans);
+    font-size: 1rem;
+    line-height: 1.65;
+    overflow-x: clip;
+  }
+  h1, h2, h3, h4 {
+    font-family: var(--font-display);
+    letter-spacing: -0.025em;
+    line-height: 1.02;
+    text-wrap: balance;
+  }
+  ::selection {
+    background: var(--color-gold);
+    color: var(--color-ink);
+  }
+  :focus-visible {
+    outline: 2px solid var(--color-gold);
+    outline-offset: 3px;
+    border-radius: 4px;
+  }
+  a, button, [role="button"], label[for], summary {
+    cursor: pointer;
+    touch-action: manipulation;
+  }
+}
+
+/* Lenis smooth scroll */
+html.lenis, html.lenis body { height: auto; }
+.lenis.lenis-smooth { scroll-behavior: auto !important; }
+.lenis.lenis-stopped { overflow: clip; }
+
+/* ─── Components ────────────────────────────────────── */
+@layer components {
+  .container-x {
+    width: 100%;
+    max-width: 88rem;
+    margin-inline: auto;
+    padding-inline: clamp(1rem, 4vw, 3rem);
+  }
+
+  .eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.6rem;
+    font-size: 0.78rem;
+    font-weight: 700;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--color-gold-deep);
+  }
+  .eyebrow::before {
+    content: "";
+    width: 1.75rem;
+    height: 2px;
+    background: currentColor;
+  }
+  .on-dark .eyebrow { color: var(--color-gold-light); }
+
+  .btn {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.6rem;
+    min-height: 3.25rem;
+    padding: 0.85rem 1.6rem;
+    border-radius: 999px;
+    font-weight: 700;
+    font-size: 0.95rem;
+    letter-spacing: 0.01em;
+    overflow: hidden;
+    isolation: isolate;
+    transition: color 0.4s var(--ease-out-expo), border-color 0.4s, transform 0.2s;
+  }
+  .btn::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    border-radius: inherit;
+    transform: translateY(101%);
+    transition: transform 0.5s var(--ease-out-expo);
+  }
+  .btn:hover::before { transform: translateY(0); }
+  .btn:active { transform: scale(0.97); }
+  .btn svg { transition: transform 0.4s var(--ease-out-expo); }
+  .btn:hover svg { transform: translateX(3px); }
+
+  .btn-primary { background: var(--color-gold); color: var(--color-ink); }
+  .btn-primary::before { background: var(--color-ink); }
+  .btn-primary:hover { color: var(--color-bone); }
+
+  .btn-dark { background: var(--color-ink); color: var(--color-bone); }
+  .btn-dark::before { background: var(--color-gold); }
+  .btn-dark:hover { color: var(--color-ink); }
+
+  .btn-ghost { border: 1.5px solid currentColor; }
+  .btn-ghost::before { background: var(--color-ink); }
+  .btn-ghost:hover { color: var(--color-bone); border-color: var(--color-ink); }
+  .on-dark .btn-ghost::before { background: var(--color-bone); }
+  .on-dark .btn-ghost:hover { color: var(--color-ink); border-color: var(--color-bone); }
+
+  .grain::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    opacity: 0.07;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  }
+
+  .blueprint-grid {
+    background-image:
+      linear-gradient(rgb(212 168 101 / 0.07) 1px, transparent 1px),
+      linear-gradient(90deg, rgb(212 168 101 / 0.07) 1px, transparent 1px);
+    background-size: 32px 32px;
+  }
+}
+
+/* ─── Motion: beginstaten (alleen als JS draait en beweging is toegestaan) ─── */
+@media (prefers-reduced-motion: no-preference) {
+  .js:not(.motion-fallback) [data-reveal] {
+    opacity: 0;
+    transform: translateY(28px);
+  }
+  .js:not(.motion-fallback) [data-clip-reveal] {
+    clip-path: inset(100% 0% 0% 0%);
+  }
+  .js:not(.motion-fallback) [data-split] .word > span {
+    transform: translateY(110%);
+  }
+}
+[data-split] .word {
+  display: inline-block;
+  overflow: hidden;
+  vertical-align: top;
+  padding-bottom: 0.08em;
+  margin-bottom: -0.08em;
+}
+[data-split] .word > span { display: inline-block; }
+
+/* Marquee */
+@keyframes marquee {
+  to { transform: translateX(-50%); }
+}
+.marquee-track {
+  animation: marquee var(--marquee-duration, 40s) linear infinite;
+}
+.marquee:hover .marquee-track { animation-play-state: paused; }
+@media (prefers-reduced-motion: reduce) {
+  .marquee-track { animation: none; }
+}

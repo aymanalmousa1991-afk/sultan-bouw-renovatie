@@ -1,0 +1,32 @@
+---
+import { Picture } from 'astro:assets';
+import Base from '../layouts/Base.astro';
+import ReviewForm from '../components/ReviewForm.astro';
+import { company } from '../data/site';
+import ownerPhoto from '../assets/eigenaar.jpg';
+---
+<!-- Deel deze link na een klus met klanten: /review/ -->
+<Base title="Laat een review achter" description={`Deel uw ervaring met ${company.name}.`}>
+  <section class="pb-24 pt-32 md:pt-40">
+    <div class="container-x grid grid-cols-1 items-start gap-12 lg:grid-cols-12">
+      <div class="lg:col-span-5">
+        <div class="flex items-center gap-4" data-reveal>
+          <div class="size-16 overflow-hidden rounded-full">
+            <Picture src={ownerPhoto} formats={['avif', 'webp']} widths={[128]} alt="" pictureAttributes={{ class: 'block h-full [&>img]:h-full [&>img]:w-full [&>img]:object-cover [&>img]:object-top' }} />
+          </div>
+          <div>
+            <p class="font-semibold">{company.owner}</p>
+            <p class="text-sm text-muted">Eigenaar · {company.name}</p>
+          </div>
+        </div>
+        <h1 data-split="load" class="mt-8 text-[clamp(2.4rem,5vw,4rem)] font-bold">Hoe heeft u ons werk ervaren?</h1>
+        <p data-reveal class="mt-5 text-lg text-muted">Bedankt voor het vertrouwen! Uw review helpt ons én andere klanten. Het kost u maar een minuutje.</p>
+      </div>
+      <div class="lg:col-span-6 lg:col-start-7">
+        <div data-reveal class="rounded-[2rem] border border-ink/10 bg-white/70 p-6 shadow-2xl shadow-night/5 sm:p-10">
+          <ReviewForm />
+        </div>
+      </div>
+    </div>
+  </section>
+</Base>

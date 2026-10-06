@@ -1,0 +1,64 @@
+---
+import { ArrowUpRight, Phone, Mail, MapPin, Clock, FileDown } from '@lucide/astro';
+import Logo from './Logo.astro';
+import Socials from './Socials.astro';
+import { company, services } from '../data/site';
+
+const year = new Date().getFullYear();
+---
+<footer class="on-dark relative overflow-hidden bg-ink text-bone">
+  <div class="container-x relative pt-24 pb-10">
+    <div class="grid grid-cols-1 gap-14 lg:grid-cols-12">
+      <div class="lg:col-span-4">
+        <Logo variant="stacked" />
+        <p class="mt-6 max-w-sm text-bone/70">
+          Vakkundige renovatie en afwerking in {company.city} en omgeving. Eén aanspreekpunt, heldere afspraken en werk waar we trots op zijn.
+        </p>
+        <a href="/offerte/" class="btn btn-primary mt-8">Gratis offerte aanvragen <ArrowUpRight class="size-4" aria-hidden="true" /></a>
+        <a href="/drukwerk/" class="mt-4 inline-flex items-center gap-2 text-sm font-semibold text-bone/75 transition-colors hover:text-gold-light"><FileDown class="size-4" aria-hidden="true" /> Flyer &amp; visitekaartje downloaden</a>
+        <Socials class="mt-8" />
+      </div>
+
+      <div class="lg:col-span-3">
+        <h2 class="font-sans text-xs font-bold uppercase tracking-[0.18em] text-gold-light">Diensten</h2>
+        <ul class="mt-5 space-y-2.5 text-bone/75">
+          {services.slice(0, 7).map((s) => (
+            <li><a href={`/diensten/${s.slug}/`} class="transition-colors hover:text-bone">{s.title}</a></li>
+          ))}
+          <li><a href="/diensten/" class="font-semibold text-bone hover:text-gold-light">Alle diensten →</a></li>
+        </ul>
+      </div>
+
+      <div class="lg:col-span-3">
+        <h2 class="font-sans text-xs font-bold uppercase tracking-[0.18em] text-gold-light">Contact</h2>
+        <ul class="mt-5 space-y-3.5 text-bone/75">
+          <li><a href={company.phoneHref} class="inline-flex items-center gap-3 hover:text-bone"><Phone class="size-4 text-gold-light" aria-hidden="true" />{company.phone}</a></li>
+          <li><a href={`mailto:${company.email}`} class="inline-flex items-center gap-3 break-all hover:text-bone"><Mail class="size-4 shrink-0 text-gold-light" aria-hidden="true" />{company.email}</a></li>
+          <li class="inline-flex items-center gap-3"><MapPin class="size-4 text-gold-light" aria-hidden="true" />{company.city} + {company.radiusKm} km</li>
+        </ul>
+      </div>
+
+      <div class="lg:col-span-2">
+        <h2 class="font-sans text-xs font-bold uppercase tracking-[0.18em] text-gold-light">Openingstijden</h2>
+        <ul class="mt-5 space-y-3 text-bone/75">
+          {company.hours.map((h) => (
+            <li class="flex gap-3"><Clock class="mt-1 size-4 shrink-0 text-gold-light" aria-hidden="true" /><span>{h.days}<br /><span class="text-bone">{h.time}</span></span></li>
+          ))}
+        </ul>
+      </div>
+    </div>
+
+    <div class="mt-20 flex flex-col gap-4 border-t border-white/10 pt-8 text-sm text-bone/55 md:flex-row md:items-center md:justify-between">
+      <p>© {year} {company.name} · KvK {company.kvk}</p>
+      <div class="flex flex-wrap gap-6">
+        <a href="/drukwerk/" class="hover:text-bone">Flyer &amp; visitekaartje</a>
+        <a href="/privacy/" class="hover:text-bone">Privacyverklaring</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Groot woordmerk als afsluiter -->
+  <div aria-hidden="true" class="pointer-events-none select-none overflow-hidden">
+    <p data-footer-mark class="-mb-[0.22em] text-center font-display text-[25vw] font-extrabold leading-none tracking-[-0.06em] text-white/[0.05]">Sultan</p>
+  </div>
+</footer>

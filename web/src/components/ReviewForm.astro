@@ -1,0 +1,123 @@
+---
+import { Star, Check } from '@lucide/astro';
+import { services } from '../data/site';
+import Honeypot from './Honeypot.astro';
+---
+<form data-review-form novalidate class="relative space-y-5">
+  <Honeypot />
+  <div>
+    <label for="r-name" class="r-label">Uw naam <span class="text-gold-deep">*</span></label>
+    <input id="r-name" name="name" required minlength="2" maxlength="100" autocomplete="name" class="r-input" placeholder="Bijv. Familie Jansen" aria-describedby="r-name-error" />
+    <p id="r-name-error" class="r-err hidden">Vul uw naam in.</p>
+  </div>
+
+  <fieldset>
+    <legend class="r-label">Uw beoordeling <span class="text-gold-deep">*</span></legend>
+    <div class="stars flex flex-row-reverse justify-end gap-1">
+      {[5, 4, 3, 2, 1].map((n) => (
+        <>
+          <input type="radio" name="stars" id={`r-star-${n}`} value={n} class="peer sr-only" />
+          <label for={`r-star-${n}`} class="star grid size-11 place-items-center rounded-xl text-ink/20 transition-[color,transform] duration-200 hover:scale-110" aria-label={`${n} ${n === 1 ? 'ster' : 'sterren'}`}>
+            <Star class="size-8 fill-current" stroke-width={1} aria-hidden="true" />
+          </label>
+        </>
+      ))}
+    </div>
+    <p id="r-stars-error" class="r-err hidden">Kies een aantal sterren.</p>
+  </fieldset>
+
+  <div>
+    <label for="r-dienst" class="r-label">Welke werkzaamheden?</label>
+    <select id="r-dienst" name="dienst" class="r-input">
+      <option value="">Maak een keuze (optioneel)</option>
+      {services.map((s) => <option>{s.title}</option>)}
+    </select>
+  </div>
+
+  <div>
+    <label for="r-message" class="r-label">Uw ervaring <span class="text-gold-deep">*</span></label>
+    <textarea id="r-message" name="message" required minlength="10" maxlength="2000" rows="4" class="r-input min-h-32 resize-y" placeholder="Hoe heeft u de samenwerking ervaren?" aria-describedby="r-message-error"></textarea>
+    <p id="r-message-error" class="r-err hidden">Schrijf minimaal een korte zin (10 tekens).</p>
+  </div>
+
+  <p class="text-sm text-muted">Uw naam en review worden na controle op deze website getoond.</p>
+
+  <button type="submit" class="btn btn-dark w-full">
+    <span class="lbl">Review plaatsen</span>
+    <span class="ld hidden items-center gap-2"><span class="size-4 animate-spin rounded-full border-2 border-bone/30 border-t-bone"></span> Versturen…</span>
+  </button>
+  <div data-status role="status" aria-live="polite"></div>
+</form>
+
+<div data-review-success class="hidden flex-col items-center py-10 text-center" tabindex="-1">
+  <span class="grid size-16 place-items-center rounded-full bg-gold text-ink"><Check class="size-8" stroke-width={2.5} aria-hidden="true" /></span>
+  <p class="mt-6 font-display text-3xl font-bold">Hartelijk dank!</p>
+  <p class="mt-2 max-w-sm text-muted">Uw review is ontvangen en verschijnt na een korte controle op de website.</p>
+</div>
+
+<style>
+  .r-label { display: block; font-weight: 700; font-size: 0.95rem; margin-bottom: 0.5rem; }
+  .r-input {
+    display: block; width: 100%; min-height: 3.25rem; border-radius: 1rem;
+    border: 2px solid rgb(28 26 24 / 0.12); background: var(--color-bone);
+    padding: 0.8rem 1rem; font-size: 1rem; transition: border-color 0.3s, box-shadow 0.3s;
+  }
+  .r-input:hover { border-color: rgb(28 26 24 / 0.28); }
+  .r-input:focus { outline: none; border-color: var(--color-gold); box-shadow: 0 0 0 4px rgb(181 136 73 / 0.2); }
+  .r-input[aria-invalid='true'] { border-color: #b91c1c; }
+  .r-err { margin-top: 0.4rem; font-size: 0.875rem; font-weight: 600; color: #b91c1c; }
+  /* Sterren: de gekozen ster en alle sterren ervóór (door flex-row-reverse) kleuren goud */
+  .stars input:checked ~ label, .stars label:hover, .stars label:hover ~ label { color: var(--color-gold); }
+  .stars input:focus-visible + label { outline: 2px solid var(--color-gold); outline-offset: 2px; }
+</style>
+
+<script>
+  document.querySelectorAll<HTMLFormElement>('[data-review-form]').forEach((form) => {
+    const status = form.querySelector<HTMLElement>('[data-status]')!;
+    const btn = form.querySelector<HTMLButtonElement>('button[type="submit"]')!;
+    const success = form.nextElementSibling as HTMLElement;
+    const field = (n: string) => form.elements.namedItem(n) as HTMLInputElement;
+
+    const flag = (el: HTMLElement | null, errId: string, bad: boolean) => {
+      el?.setAttribute('aria-invalid', String(bad));
+      form.querySelector(`#${errId}`)?.classList.toggle('hidden', !bad);
+      return bad;
+    };
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const name = field('name').value.trim();
+      const message = field('message').value.trim();
+      const stars = (form.querySelector('input[name="stars"]:checked') as HTMLInputElement | null)?.value;
+      const bad = [
+        flag(field('name'), 'r-name-error', name.length < 2) && '#r-name',
+        flag(null, 'r-stars-error', !stars) && '#r-star-5',
+        flag(field('message'), 'r-message-error', message.length < 10) && '#r-message',
+      ].filter(Boolean) as string[];
+      if (bad.length) { form.querySelector<HTMLElement>(bad[0])?.focus(); return; }
+
+      btn.disabled = true;
+      btn.querySelector('.lbl')!.classList.add('hidden');
+      btn.querySelector('.ld')!.classList.replace('hidden', 'inline-flex');
+      status.textContent = '';
+      try {
+        const res = await fetch('/api/review', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ name, stars: Number(stars), dienst: field('dienst').value, message, website: field('website').value }),
+        });
+        const json = await res.json().catch(() => ({}));
+        if (!res.ok || !json.success) throw new Error(json.message);
+        form.classList.add('hidden');
+        success.classList.replace('hidden', 'flex');
+        success.focus();
+      } catch (err) {
+        status.className = 'rounded-2xl bg-red-50 p-4 text-sm text-red-800';
+        status.textContent = (err as Error).message || 'Versturen is niet gelukt. Probeer het later opnieuw.';
+        btn.disabled = false;
+        btn.querySelector('.lbl')!.classList.remove('hidden');
+        btn.querySelector('.ld')!.classList.replace('inline-flex', 'hidden');
+      }
+    });
+  });
+</script>
