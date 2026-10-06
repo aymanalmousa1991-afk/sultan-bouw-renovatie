@@ -163,7 +163,8 @@ export const areas = [
   'Castricum', 'Heemskerk', 'Beverwijk', 'IJmuiden', 'Velsen', 'Haarlem', 'Heemstede',
   'Bloemendaal', 'Zandvoort', 'Hillegom', 'Lisse', 'Leiden', 'Weesp', 'Muiden', 'Naarden',
   'Bussum', 'Huizen', 'Laren', 'Blaricum', 'Hilversum', 'Almere', 'Lelystad', 'Utrecht',
-  'Maarssen', 'Breukelen',
+  'Maarssen', 'Breukelen', 'Zeist', 'Woerden', 'Amersfoort', 'Nijkerk', 'Alphen aan den Rijn',
+  'Gouda', 'Zoetermeer', 'Den Haag', 'Rotterdam', 'Enkhuizen',
 ];
 
 export const faqs = [

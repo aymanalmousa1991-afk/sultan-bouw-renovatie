@@ -1,70 +1,104 @@
 ---
-import { MapPin } from '@lucide/astro';
-import { company, areas } from '../../data/site';
+import { ArrowRight, MessageCircle } from '@lucide/astro';
+import { company } from '../../data/site';
 
-// Echte coördinaten; omgerekend naar de kaart rond Amsterdam (centrum 280,280)
+// Kaart op echte coördinaten rond Amsterdam (centrum 300,300)
 const AMS = { lat: 52.3676, lon: 4.9041 };
-const coords: Record<string, [number, number]> = {
-  Amstelveen: [52.3008, 4.8639], Diemen: [52.3394, 4.9626], Zaandam: [52.442, 4.8292],
-  Haarlem: [52.3874, 4.6462], Hoofddorp: [52.3061, 4.6907], Almere: [52.3508, 5.2647],
-  Purmerend: [52.505, 4.9597], Hilversum: [52.2292, 5.1669], Utrecht: [52.0907, 5.1214],
-  Leiden: [52.1601, 4.497], Alkmaar: [52.6324, 4.7534], Lelystad: [52.5185, 5.4714],
-  Weesp: [52.3076, 5.0419], Uithoorn: [52.2375, 4.825], Aalsmeer: [52.2617, 4.7625],
-  Hoorn: [52.6424, 5.0597], Volendam: [52.495, 5.07], Beverwijk: [52.4836, 4.6563],
-  IJmuiden: [52.4583, 4.6194], Zandvoort: [52.3713, 4.5333], Bussum: [52.2735, 5.161],
-  Huizen: [52.299, 5.242], Mijdrecht: [52.2067, 4.8625], Heerhugowaard: [52.664, 4.83],
-  Castricum: [52.548, 4.669], Lisse: [52.259, 4.557], Maarssen: [52.136, 5.04],
-};
-const toXY = ([lat, lon]: [number, number]) => ({
-  x: 280 + (lon - AMS.lon) * 68 * 5.2,
-  y: 280 - (lat - AMS.lat) * 111 * 5.2,
+const SCALE = 4.3; // px per km → ca. 65 km tot de rand
+type City = { name: string; lat: number; lon: number; label?: 'left' | 'right'; big?: boolean };
+const cities: City[] = [
+  // Grote steden (met naam)
+  { name: 'Haarlem', lat: 52.3874, lon: 4.6462, label: 'left', big: true },
+  { name: 'Zaandam', lat: 52.442, lon: 4.8292, label: 'left', big: true },
+  { name: 'Purmerend', lat: 52.505, lon: 4.9597, label: 'left', big: true },
+  { name: 'Hoorn', lat: 52.6424, lon: 5.0597, label: 'right', big: true },
+  { name: 'Alkmaar', lat: 52.6324, lon: 4.7534, label: 'left', big: true },
+  { name: 'Lelystad', lat: 52.5185, lon: 5.4714, label: 'right', big: true },
+  { name: 'Almere', lat: 52.3508, lon: 5.2647, label: 'right', big: true },
+  { name: 'Hilversum', lat: 52.2292, lon: 5.1669, label: 'right', big: true },
+  { name: 'Amersfoort', lat: 52.1561, lon: 5.3878, label: 'right', big: true },
+  { name: 'Utrecht', lat: 52.0907, lon: 5.1214, label: 'right', big: true },
+  { name: 'Hoofddorp', lat: 52.3061, lon: 4.6907, label: 'left', big: true },
+  { name: 'Leiden', lat: 52.1601, lon: 4.497, label: 'left', big: true },
+  { name: 'Den Haag', lat: 52.0705, lon: 4.3007, label: 'left', big: true },
+  { name: 'Zoetermeer', lat: 52.0575, lon: 4.4931, label: 'right', big: true },
+  { name: 'Gouda', lat: 52.0116, lon: 4.7105, label: 'right', big: true },
+  { name: 'Rotterdam', lat: 51.9244, lon: 4.4777, label: 'left', big: true },
+  // Kleinere plaatsen (alleen een stip)
+  { name: 'Amstelveen', lat: 52.3008, lon: 4.8639 }, { name: 'Diemen', lat: 52.3394, lon: 4.9626 },
+  { name: 'Weesp', lat: 52.3076, lon: 5.0419 }, { name: 'Uithoorn', lat: 52.2375, lon: 4.825 },
+  { name: 'Aalsmeer', lat: 52.2617, lon: 4.7625 }, { name: 'Mijdrecht', lat: 52.2067, lon: 4.8625 },
+  { name: 'Volendam', lat: 52.495, lon: 5.07 }, { name: 'Beverwijk', lat: 52.4836, lon: 4.6563 },
+  { name: 'IJmuiden', lat: 52.4583, lon: 4.6194 }, { name: 'Zandvoort', lat: 52.3713, lon: 4.5333 },
+  { name: 'Bussum', lat: 52.2735, lon: 5.161 }, { name: 'Huizen', lat: 52.299, lon: 5.242 },
+  { name: 'Heerhugowaard', lat: 52.664, lon: 4.83 }, { name: 'Castricum', lat: 52.548, lon: 4.669 },
+  { name: 'Lisse', lat: 52.259, lon: 4.557 }, { name: 'Maarssen', lat: 52.136, lon: 5.04 },
+  { name: 'Alphen aan den Rijn', lat: 52.129, lon: 4.6556 }, { name: 'Woerden', lat: 52.0857, lon: 4.8833 },
+  { name: 'Zeist', lat: 52.0907, lon: 5.2333 }, { name: 'Nijkerk', lat: 52.22, lon: 5.4861 },
+  { name: 'Enkhuizen', lat: 52.7033, lon: 5.2917 }, { name: 'Edam', lat: 52.5136, lon: 5.0486 },
+];
+const pos = (c: City) => ({
+  ...c,
+  x: 300 + (c.lon - AMS.lon) * 68 * SCALE,
+  y: 300 - (c.lat - AMS.lat) * 111 * SCALE,
 });
-const labelled = new Set(['Haarlem', 'Almere', 'Utrecht', 'Leiden', 'Alkmaar', 'Lelystad', 'Hilversum', 'Purmerend', 'Hoorn', 'Zaandam']);
-const dots = Object.entries(coords).map(([name, c]) => ({ name, ...toXY(c) }));
+const dots = cities.map(pos);
+const ariaCities = cities.filter((c) => c.big).map((c) => c.name).join(', ');
 ---
-<section class="on-dark relative overflow-hidden bg-ink py-24 text-bone md:py-36">
-  <div class="container-x grid grid-cols-1 items-center gap-16 lg:grid-cols-2">
-    <div>
+<section class="on-dark relative overflow-hidden bg-ink py-24 text-bone md:py-32">
+  <div class="container-x grid grid-cols-1 items-center gap-12 lg:grid-cols-12">
+    <div class="lg:col-span-5">
       <p class="eyebrow" data-reveal>Werkgebied</p>
       <h2 data-split class="mt-5 text-[clamp(2.2rem,4.6vw,4rem)] font-bold">Gevestigd in {company.city}. Actief in de hele regio.</h2>
       <p data-reveal class="mt-6 max-w-lg text-lg text-bone/70">
-        We komen graag vrijblijvend bij u langs. Staat uw woonplaats er niet tussen? Bel of app ons gerust, dan kijken we wat er mogelijk is.
+        Van Alkmaar tot Rotterdam en van Haarlem tot Amersfoort: we komen graag vrijblijvend bij u langs.
       </p>
-      <ul data-reveal class="mt-10 flex flex-wrap gap-1.5" aria-label="Plaatsen waar wij werken">
-        {areas.map((a) => (
-          <li class="inline-flex items-center gap-1 rounded-full border border-white/12 px-2.5 py-1 text-[0.8rem] text-bone/75">
-            <MapPin class="size-3 text-gold-light" aria-hidden="true" />{a}
-          </li>
-        ))}
-      </ul>
+      <p data-reveal class="mt-4 max-w-lg text-bone/70">
+        Twijfelt u of wij ook in uw woonplaats werken? Bel of app ons gerust, dan kijken we wat er mogelijk is.
+      </p>
+      <div data-reveal class="mt-10 flex flex-wrap gap-3">
+        <a href="/offerte/" class="btn btn-primary">Offerte aanvragen <ArrowRight class="size-4" aria-hidden="true" /></a>
+        <a href={company.whatsappHref} target="_blank" rel="noopener noreferrer" class="btn btn-ghost"><MessageCircle class="size-4" aria-hidden="true" /> App ons</a>
+      </div>
     </div>
 
-    <div data-reveal class="relative mx-auto w-full max-w-[34rem]">
-      <svg viewBox="0 0 560 560" class="h-auto w-full" role="img" aria-label={`Kaart van het werkgebied rond ${company.city}`}>
+    <div data-reveal class="relative lg:col-span-7">
+      <svg viewBox="0 0 600 600" class="mx-auto h-auto w-full max-w-[44rem]" role="img" aria-label={`Kaart van ons werkgebied rond ${company.city}, met onder andere ${ariaCities}`}>
         <defs>
           <radialGradient id="area-glow">
-            <stop offset="0" stop-color="#b58849" stop-opacity=".22" />
+            <stop offset="0" stop-color="#b58849" stop-opacity=".26" />
+            <stop offset=".75" stop-color="#b58849" stop-opacity=".06" />
             <stop offset="1" stop-color="#b58849" stop-opacity="0" />
           </radialGradient>
         </defs>
-        <circle cx="280" cy="280" r="270" fill="url(#area-glow)" />
-        <g fill="none" stroke="#f4f1ea" stroke-opacity=".1">
-          <circle cx="280" cy="280" r="90" />
-          <circle cx="280" cy="280" r="180" />
-          <circle cx="280" cy="280" r="265" stroke-dasharray="3 7" />
+        <circle cx="300" cy="300" r="296" fill="url(#area-glow)" />
+        <g fill="none" stroke="#f4f1ea" stroke-opacity=".09">
+          <circle cx="300" cy="300" r="95" />
+          <circle cx="300" cy="300" r="185" />
+          <circle cx="300" cy="300" r="275" stroke-dasharray="3 7" stroke-opacity=".16" />
         </g>
-        {dots.map((c) => (
+        {dots.filter((c) => !c.big).map((c) => (
+          <circle cx={c.x} cy={c.y} r="2.6" fill="#d4a865" fill-opacity=".55" />
+        ))}
+        {dots.filter((c) => c.big).map((c) => (
           <g>
-            <circle cx={c.x} cy={c.y} r={labelled.has(c.name) ? 4.5 : 3} fill="#d4a865" fill-opacity={labelled.has(c.name) ? 1 : 0.7} />
-            {labelled.has(c.name) && (
-              <text x={c.x < 280 ? c.x - 8 : c.x + 8} y={c.y + 4} text-anchor={c.x < 280 ? 'end' : 'start'} fill="#f4f1ea" fill-opacity=".75" font-family="Manrope Variable, sans-serif" font-size="13" font-weight="600">{c.name}</text>
-            )}
+            <circle cx={c.x} cy={c.y} r="4.5" fill="#d4a865" />
+            <text
+              x={c.label === 'left' ? c.x - 9 : c.x + 9}
+              y={c.y + 4.5}
+              text-anchor={c.label === 'left' ? 'end' : 'start'}
+              fill="#f4f1ea"
+              fill-opacity=".8"
+              font-family="Manrope Variable, sans-serif"
+              font-size="14"
+              font-weight="600"
+            >{c.name}</text>
           </g>
         ))}
-        <circle cx="280" cy="280" r="12" fill="#b58849" class="pulse" />
-        <g transform="translate(280 280)">
-          <rect x="-62" y="-17" width="124" height="34" rx="17" fill="#b58849" />
-          <text y="6" text-anchor="middle" fill="#1c1a18" font-family="Bricolage Grotesque Variable, sans-serif" font-size="17" font-weight="700">{company.city}</text>
+        <circle cx="300" cy="300" r="12" fill="#b58849" class="pulse" />
+        <g transform="translate(300 300)">
+          <rect x="-64" y="-18" width="128" height="36" rx="18" fill="#b58849" />
+          <text y="6" text-anchor="middle" fill="#1c1a18" font-family="Bricolage Grotesque Variable, sans-serif" font-size="18" font-weight="700">{company.city}</text>
         </g>
       </svg>
     </div>
