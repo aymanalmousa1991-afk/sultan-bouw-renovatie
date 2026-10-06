@@ -2,7 +2,7 @@
 import '../styles/global.css';
 import Nav from '../components/Nav.astro';
 import Footer from '../components/Footer.astro';
-import { company, services } from '../data/site';
+import { company, services, areas } from '../data/site';
 
 interface Props {
   title?: string;
@@ -17,13 +17,13 @@ interface Props {
 
 const {
   title,
-  description = `${company.name}: vakkundige renovatie, badkamers, keukens, tegelwerk, schilderwerk en meer. Gevestigd in ${company.city}, actief binnen ${company.radiusKm} km. Gratis offerte.`,
+  description = `${company.name}: vakkundige renovatie, badkamers, keukens, tegelwerk, schilderwerk en meer. Actief in ${company.region}. Vrijblijvende offerte.`,
   darkTop = false,
   schema = [],
   noindex = false,
 } = Astro.props;
 
-const fullTitle = title ? `${title} | ${company.name}` : `Renovatie & verbouwing in ${company.city} e.o. | ${company.name}`;
+const fullTitle = title ? `${title} | ${company.name}` : `Renovatie & verbouwing in ${company.region} | ${company.name}`;
 const ogImage = new URL('/og-image.jpg', Astro.site);
 const canonical = new URL(Astro.url.pathname, Astro.site);
 
@@ -40,11 +40,11 @@ const jsonLd = {
   telephone: '+31630003016',
   email: company.email,
   address: { '@type': 'PostalAddress', addressLocality: company.city, addressCountry: 'NL' },
-  areaServed: { '@type': 'GeoCircle', geoMidpoint: { '@type': 'GeoCoordinates', latitude: 52.3676, longitude: 4.9041 }, geoRadius: company.radiusKm * 1000 },
+  areaServed: areas.map((name) => ({ '@type': 'City', name })),
   openingHoursSpecification: [{
     '@type': 'OpeningHoursSpecification',
-    dayOfWeek: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'],
-    opens: '09:00', closes: '17:00',
+    dayOfWeek: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'],
+    opens: '00:00', closes: '23:59',
   }],
   founder: { '@type': 'Person', name: company.owner },
   sameAs: Object.values(company.socials).filter(Boolean),

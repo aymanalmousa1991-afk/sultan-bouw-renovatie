@@ -7,8 +7,8 @@ import LogoDark from '../../../assets/brand/logo-horizontal-dark.svg';
 import { company, services, process } from '../../../data/site';
 import { qrSvg } from '../../../lib/qr';
 import cover from '../../../assets/projects/woonkamer-led-plafond.jpg';
-import p1 from '../../../assets/projects/tv-wand-sfeerverlichting.jpg';
-import p2 from '../../../assets/projects/wandpanelen-gang.jpg';
+import p1 from '../../../assets/projects/inloopdouche-marmerlook.jpg';
+import p2 from '../../../assets/projects/trap-bekleed.jpg';
 import p3 from '../../../assets/projects/keuken-montage.jpg';
 import p4 from '../../../assets/projects/plafond-led-lijnen-tv-wand.jpg';
 import owner from '../../../assets/eigenaar.jpg';
@@ -18,9 +18,9 @@ const qrGold = await qrSvg(company.whatsappHref, '#1c1a18');
 const insta = '@' + company.socials.instagram.replace(/\/$/, '').split('/').pop();
 const usps = [
   { icon: Clock, title: `${company.yearsExperience}+ jaar ervaring`, text: 'Vakmanschap waar u op kunt bouwen.' },
-  { icon: BadgeCheck, title: 'Heldere prijs vooraf', text: 'Gratis opname, eerlijke offerte.' },
+  { icon: BadgeCheck, title: 'Heldere prijs vooraf', text: 'Vrijblijvende opname, eerlijke offerte.' },
   { icon: UserRound, title: 'Eén aanspreekpunt', text: 'Direct contact met de eigenaar.' },
-  { icon: Sparkles, title: 'Netjes & op tijd', text: 'Schone werkplek, elke dag.' },
+  { icon: Sparkles, title: 'Zorgvuldig & professioneel', text: 'Oog voor detail en afwerking.' },
 ];
 const photos = [p1, p2, p3, p4];
 ---
@@ -32,7 +32,7 @@ const photos = [p1, p2, p3, p4];
       <div class="absolute inset-0 bg-gradient-to-b from-night/80 via-night/10 to-night/90"></div>
       <LogoHorizontal class="absolute left-[11mm] top-[11mm] h-[13mm] w-auto" role="img" aria-label={company.name} />
       <div class="absolute inset-x-[11mm] bottom-[9mm] text-bone">
-        <p class="text-[7pt] font-bold uppercase tracking-[0.28em] text-gold-light">Bouw &amp; Renovatie · {company.city} e.o.</p>
+        <p class="text-[7pt] font-bold uppercase tracking-[0.28em] text-gold-light">Bouw &amp; Renovatie · {company.region}</p>
         <h1 class="mt-[2.5mm] text-[27pt] font-bold leading-[0.98]">Vakwerk dat uw huis <span class="text-gold-light">thuis</span> maakt.</h1>
       </div>
     </div>
@@ -50,7 +50,7 @@ const photos = [p1, p2, p3, p4];
 
       <div class="mt-auto flex items-center gap-[5mm] rounded-[4mm] bg-night px-[6mm] py-[5mm] text-bone">
         <div class="flex-1">
-          <p class="font-display text-[14pt] font-bold leading-tight">Gratis offerte &amp; opname</p>
+          <p class="font-display text-[14pt] font-bold leading-tight">Vrijblijvende offerte &amp; opname</p>
           <p class="mt-[1mm] text-[7.5pt] text-bone/75">Bel of app ons — reactie binnen 24 uur.</p>
           <p class="mt-[2.5mm] flex items-center gap-[2mm] font-display text-[17pt] font-bold text-gold-light">
             <Phone class="size-[5mm]" stroke-width={2.2} />{company.phone}
@@ -113,7 +113,7 @@ const photos = [p1, p2, p3, p4];
           <li class="flex items-center gap-[1.8mm]"><Phone class="size-[3mm] text-gold-deep" stroke-width={2.2} /><b>{company.phone}</b></li>
           <li class="flex items-center gap-[1.8mm]"><Mail class="size-[3mm] text-gold-deep" stroke-width={2.2} />{company.email}</li>
           <li class="flex items-center gap-[1.8mm]"><AtSign class="size-[3mm] text-gold-deep" stroke-width={2.2} />{insta} · Facebook · TikTok</li>
-          <li class="flex items-center gap-[1.8mm]"><MapPin class="size-[3mm] text-gold-deep" stroke-width={2.2} />{company.city} + {company.radiusKm} km · KvK {company.kvk}</li>
+          <li class="flex items-center gap-[1.8mm]"><MapPin class="size-[3mm] text-gold-deep" stroke-width={2.2} />{company.region} · KvK {company.kvk}</li>
         </ul>
       </div>
       <LogoDark class="h-[10mm] w-auto shrink-0 self-start" aria-hidden="true" />

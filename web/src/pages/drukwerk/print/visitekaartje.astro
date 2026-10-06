@@ -18,7 +18,7 @@ const insta = '@' + company.socials.instagram.replace(/\/$/, '').split('/').pop(
       <LogoStacked class="h-[27mm] w-auto" role="img" aria-label={company.name} />
     </div>
     <p class="absolute inset-x-0 bottom-[6.5mm] text-center text-[5.6pt] font-bold uppercase tracking-[0.32em] text-gold-light">
-      Bouw &amp; Renovatie · {company.city} e.o.
+      Bouw &amp; Renovatie · {company.region}
     </p>
   </section>
 
@@ -29,12 +29,11 @@ const insta = '@' + company.socials.instagram.replace(/\/$/, '').split('/').pop(
       <div class="flex min-w-0 flex-col">
         <p class="font-display text-[12.5pt] font-bold leading-none tracking-tight">{company.owner}</p>
         <p class="mt-[1.4mm] text-[5.8pt] font-bold uppercase tracking-[0.2em] text-gold-deep">Eigenaar · {company.name}</p>
-        <div class="my-[3mm] h-[0.3mm] w-[12mm] bg-gold"></div>
-        <ul class="space-y-[1.5mm] text-[6.8pt] leading-tight">
+        <ul class="mt-[4mm] space-y-[1.5mm] text-[6.8pt] leading-tight">
           <li class="flex items-center gap-[1.8mm]"><Phone class="size-[2.8mm] shrink-0 text-gold-deep" stroke-width={2.2} /><b>{company.phone}</b></li>
           <li class="flex items-center gap-[1.8mm]"><Mail class="size-[2.8mm] shrink-0 text-gold-deep" stroke-width={2.2} />{company.email}</li>
           <li class="flex items-center gap-[1.8mm]"><AtSign class="size-[2.8mm] shrink-0 text-gold-deep" stroke-width={2.2} />{insta}</li>
-          <li class="flex items-center gap-[1.8mm]"><MapPin class="size-[2.8mm] shrink-0 text-gold-deep" stroke-width={2.2} />{company.city} + {company.radiusKm} km</li>
+          <li class="flex items-center gap-[1.8mm]"><MapPin class="size-[2.8mm] shrink-0 text-gold-deep" stroke-width={2.2} />{company.region}</li>
         </ul>
         <p class="mt-auto text-[5.2pt] text-muted">KvK {company.kvk}</p>
       </div>

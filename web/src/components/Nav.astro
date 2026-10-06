@@ -46,7 +46,7 @@ const path = Astro.url.pathname;
         <Phone class="size-4" aria-hidden="true" /> {company.phone}
       </a>
       <a href="/offerte/" class="btn btn-primary hidden !min-h-11 !py-2.5 sm:inline-flex">
-        Gratis offerte <ArrowRight class="size-4" aria-hidden="true" />
+        Offerte aanvragen <ArrowRight class="size-4" aria-hidden="true" />
       </a>
       <button
         id="menu-toggle"
@@ -69,10 +69,8 @@ const path = Astro.url.pathname;
 <div id="mobile-menu" class="on-dark fixed inset-0 z-40 hidden flex-col bg-night text-bone lg:hidden" aria-hidden="true">
   <div class="blueprint-grid absolute inset-0 opacity-60" aria-hidden="true"></div>
   <nav aria-label="Mobiel menu" class="container-x relative flex flex-1 flex-col justify-center gap-2 pt-20">
-    {[{ href: '/', label: 'Home' }, ...links, { href: '/offerte/', label: 'Offerte' }].map((l, i) => (
-      <a href={l.href} class="mm-link flex items-baseline gap-4 border-b border-white/10 py-3 font-display text-4xl font-semibold tracking-tight sm:text-5xl">
-        <span class="font-sans text-xs font-bold text-gold-light">0{i + 1}</span>{l.label}
-      </a>
+    {[{ href: '/', label: 'Home' }, ...links, { href: '/offerte/', label: 'Offerte' }].map((l) => (
+      <a href={l.href} class="mm-link border-b border-white/10 py-3 font-display text-4xl font-semibold tracking-tight sm:text-5xl">{l.label}</a>
     ))}
   </nav>
   <div class="container-x relative flex flex-col gap-3 pb-10 pt-6 text-sm">

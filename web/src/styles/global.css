@@ -82,12 +82,6 @@ html.lenis, html.lenis body { height: auto; }
     text-transform: uppercase;
     color: var(--color-gold-deep);
   }
-  .eyebrow::before {
-    content: "";
-    width: 1.75rem;
-    height: 2px;
-    background: currentColor;
-  }
   .on-dark .eyebrow { color: var(--color-gold-light); }
 
   .btn {

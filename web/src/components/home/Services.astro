@@ -17,7 +17,7 @@ const { showAllLink = true } = Astro.props;
     </div>
 
     <ul class="mt-16 grid gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-      {services.map((s, i) => (
+      {services.map((s) => (
         <li data-reveal>
           <a
             href={`/diensten/${s.slug}/`}
@@ -28,7 +28,6 @@ const { showAllLink = true } = Astro.props;
               <span class="grid size-14 place-items-center rounded-2xl bg-gold/15 text-gold-deep transition-colors duration-500 group-hover:bg-gold group-hover:text-ink">
                 <ServiceIcon name={s.icon} class="size-7" />
               </span>
-              <span class="font-display text-sm font-bold text-ink/30 transition-colors group-hover:text-bone/40">{String(i + 1).padStart(2, '0')}</span>
             </span>
             <h3 class="relative mt-10 text-2xl font-semibold transition-colors duration-500 group-hover:text-bone">{s.title}</h3>
             <p class="relative mt-3 text-muted transition-colors duration-500 group-hover:text-bone/75">{s.short}</p>

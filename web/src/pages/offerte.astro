@@ -9,15 +9,15 @@ const steps = ['Dienst', 'Project', "Foto's", 'Gegevens'];
 const propertyTypes = ['Appartement', 'Tussenwoning', 'Hoekwoning / 2-onder-1-kap', 'Vrijstaande woning', 'Bedrijfspand'];
 const startPeriods = ['Zo snel mogelijk', 'Binnen 1 maand', 'Over 1 – 3 maanden', 'Over meer dan 3 maanden', 'Weet ik nog niet'];
 ---
-<Base title="Gratis offerte aanvragen" description={`Vraag vrijblijvend een offerte aan bij ${company.name}. Binnen 24 uur reactie en een gratis opname op locatie.`}>
+<Base title="Vrijblijvende offerte aanvragen" description={`Vraag vrijblijvend een offerte aan bij ${company.name}. Binnen 24 uur reactie en een vrijblijvende opname op locatie.`}>
   <section class="relative pb-24 pt-32 md:pt-40">
     <div class="container-x grid gap-12 lg:grid-cols-12">
       <!-- Zijkolom -->
       <aside class="lg:col-span-4">
         <div class="lg:sticky lg:top-28">
-          <p class="eyebrow" data-reveal>Gratis &amp; vrijblijvend</p>
+          <p class="eyebrow" data-reveal>Vrijblijvend</p>
           <h1 data-split="load" class="mt-5 text-[clamp(2.4rem,5vw,4rem)] font-bold">Vraag uw offerte aan.</h1>
-          <p data-reveal class="mt-5 text-lg text-muted">In vier korte stappen. We reageren binnen 24 uur en komen gratis bij u langs.</p>
+          <p data-reveal class="mt-5 text-lg text-muted">In vier korte stappen. We reageren binnen 24 uur en komen vrijblijvend bij u langs.</p>
 
           <ol data-reveal class="mt-10 hidden space-y-1 lg:block" aria-hidden="true">
             {steps.map((s, i) => (
@@ -181,7 +181,7 @@ const startPeriods = ['Zo snel mogelijk', 'Binnen 1 maand', 'Over 1 – 3 maande
             <p class="mt-4 max-w-md text-lg text-muted">We hebben alles goed ontvangen en nemen binnen 24 uur contact met u op.</p>
             <ul class="mt-8 flex flex-wrap justify-center gap-6 text-sm font-semibold">
               <li class="flex items-center gap-2"><Clock class="size-4 text-gold-deep" aria-hidden="true" />Reactie binnen 24 uur</li>
-              <li class="flex items-center gap-2"><BadgeCheck class="size-4 text-gold-deep" aria-hidden="true" />Gratis opname</li>
+              <li class="flex items-center gap-2"><BadgeCheck class="size-4 text-gold-deep" aria-hidden="true" />Vrijblijvende opname</li>
             </ul>
             <a href="/" class="btn btn-dark mt-10"><Home class="size-4" aria-hidden="true" /> Terug naar home</a>
           </div>

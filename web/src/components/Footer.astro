@@ -12,9 +12,9 @@ const year = new Date().getFullYear();
       <div class="lg:col-span-4">
         <Logo variant="stacked" />
         <p class="mt-6 max-w-sm text-bone/70">
-          Vakkundige renovatie en afwerking in {company.city} en omgeving. Eén aanspreekpunt, heldere afspraken en werk waar we trots op zijn.
+          Vakkundige renovatie en afwerking in {company.region}. Eén aanspreekpunt, heldere afspraken en werk waar we trots op zijn.
         </p>
-        <a href="/offerte/" class="btn btn-primary mt-8">Gratis offerte aanvragen <ArrowUpRight class="size-4" aria-hidden="true" /></a>
+        <a href="/offerte/" class="btn btn-primary mt-8">Offerte aanvragen <ArrowUpRight class="size-4" aria-hidden="true" /></a>
         <a href="/drukwerk/" class="mt-4 inline-flex items-center gap-2 text-sm font-semibold text-bone/75 transition-colors hover:text-gold-light"><FileDown class="size-4" aria-hidden="true" /> Flyer &amp; visitekaartje downloaden</a>
         <Socials class="mt-8" />
       </div>
@@ -34,12 +34,12 @@ const year = new Date().getFullYear();
         <ul class="mt-5 space-y-3.5 text-bone/75">
           <li><a href={company.phoneHref} class="inline-flex items-center gap-3 hover:text-bone"><Phone class="size-4 text-gold-light" aria-hidden="true" />{company.phone}</a></li>
           <li><a href={`mailto:${company.email}`} class="inline-flex items-center gap-3 break-all hover:text-bone"><Mail class="size-4 shrink-0 text-gold-light" aria-hidden="true" />{company.email}</a></li>
-          <li class="inline-flex items-center gap-3"><MapPin class="size-4 text-gold-light" aria-hidden="true" />{company.city} + {company.radiusKm} km</li>
+          <li class="inline-flex items-center gap-3"><MapPin class="size-4 text-gold-light" aria-hidden="true" />{company.region}</li>
         </ul>
       </div>
 
       <div class="lg:col-span-2">
-        <h2 class="font-sans text-xs font-bold uppercase tracking-[0.18em] text-gold-light">Openingstijden</h2>
+        <h2 class="font-sans text-xs font-bold uppercase tracking-[0.18em] text-gold-light">Bereikbaarheid</h2>
         <ul class="mt-5 space-y-3 text-bone/75">
           {company.hours.map((h) => (
             <li class="flex gap-3"><Clock class="mt-1 size-4 shrink-0 text-gold-light" aria-hidden="true" /><span>{h.days}<br /><span class="text-bone">{h.time}</span></span></li>

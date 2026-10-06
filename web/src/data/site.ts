@@ -13,11 +13,12 @@ export const company = {
   kvk: '42173940',
   owner: 'Adel Al Sultan',
   city: 'Amsterdam',
-  radiusKm: 60,
+  region: 'Amsterdam en omstreken',
   yearsExperience: 10,
+  // Geen vaste openingstijden: altijd op afspraak, telefonisch 24/7 bereikbaar
   hours: [
-    { days: 'Maandag – vrijdag', time: '09:00 – 17:00' },
-    { days: 'Zaterdag & zondag', time: 'Gesloten' },
+    { days: 'Maandag t/m zondag', time: 'Op afspraak' },
+    { days: 'Telefonisch', time: '24 uur per dag bereikbaar' },
   ],
   socials: {
     instagram: 'https://www.instagram.com/sultanbouwrenovatie/',
@@ -30,8 +31,8 @@ export const company = {
 export const stats = [
   { value: 10, suffix: '+', label: 'Jaar ervaring' },
   { value: 400, suffix: '+', label: 'Afgeronde projecten' },
-  { value: 60, suffix: ' km', label: 'Werkgebied rond Amsterdam' },
   { value: 24, suffix: ' uur', label: 'Reactie op uw aanvraag' },
+  { value: 7, suffix: ' dagen', label: 'Per week op afspraak' },
 ];
 
 export type ServiceIcon =
@@ -83,7 +84,7 @@ export const services: Service[] = [
   {
     slug: 'timmerwerk',
     title: 'Timmerwerk & montage',
-    short: 'Maatwerk en montage, netjes en met precisie.',
+    short: 'Maatwerk en montage, zorgvuldig en met precisie.',
     intro: 'Van een inbouwkast op maat tot een nieuwe scheidingswand: onze timmerwerkzaamheden zijn nauwkeurig, stevig en netjes afgewerkt.',
     icon: 'carpentry',
     includes: ['Inbouwkasten en maatwerk', 'Metal-stud en scheidingswanden', 'Plinten, aftimmeren en koven', 'Montage van meubels en keukens'],
@@ -148,37 +149,58 @@ export const services: Service[] = [
 
 export const process = [
   { title: 'Kennismaking', text: 'U belt, appt of vraagt online een offerte aan. Binnen 24 uur hebben we contact.' },
-  { title: 'Opname op locatie', text: 'We komen gratis langs, bekijken de situatie en denken mee over de beste aanpak.' },
+  { title: 'Opname op locatie', text: 'We komen vrijblijvend langs, bekijken de situatie en denken mee over de beste aanpak.' },
   { title: 'Heldere offerte', text: 'U ontvangt een duidelijke prijs vooraf. Geen verrassingen achteraf.' },
   { title: 'Uitvoering', text: 'Vakkundig werk volgens planning, met een schone werkplek aan het einde van elke dag.' },
   { title: 'Oplevering & nazorg', text: 'We lopen samen alles na. Pas als u tevreden bent, is het klaar.' },
 ];
 
 export const areas = [
-  'Amsterdam', 'Amstelveen', 'Diemen', 'Zaandam', 'Haarlem', 'Hoofddorp',
-  'Almere', 'Purmerend', 'Weesp', 'Hilversum', 'Utrecht', 'Leiden',
-  'Alkmaar', 'Lelystad', 'Uithoorn', 'Aalsmeer',
+  'Amsterdam', 'Amstelveen', 'Diemen', 'Duivendrecht', 'Ouderkerk aan de Amstel', 'Badhoevedorp',
+  'Hoofddorp', 'Nieuw-Vennep', 'Haarlemmermeer', 'Aalsmeer', 'Uithoorn', 'Mijdrecht', 'Abcoude',
+  'Zaandam', 'Zaanstad', 'Wormerveer', 'Krommenie', 'Assendelft', 'Landsmeer', 'Oostzaan',
+  'Purmerend', 'Monnickendam', 'Volendam', 'Edam', 'Hoorn', 'Alkmaar', 'Heerhugowaard',
+  'Castricum', 'Heemskerk', 'Beverwijk', 'IJmuiden', 'Velsen', 'Haarlem', 'Heemstede',
+  'Bloemendaal', 'Zandvoort', 'Hillegom', 'Lisse', 'Leiden', 'Weesp', 'Muiden', 'Naarden',
+  'Bussum', 'Huizen', 'Laren', 'Blaricum', 'Hilversum', 'Almere', 'Lelystad', 'Utrecht',
+  'Maarssen', 'Breukelen',
 ];
 
 export const faqs = [
   {
-    q: 'Is een offerte echt gratis?',
-    a: 'Ja. De opname bij u thuis en de offerte zijn altijd gratis en vrijblijvend.',
+    q: 'Welke werkzaamheden voeren jullie uit?',
+    a: 'Wij verzorgen uiteenlopende bouw- en renovatiewerkzaamheden, van keuken- en badkamerrenovaties tot complete woningrenovaties, verbouwingen en afwerking. Voor iedere aanvraag bekijken we de situatie en bespreken we wat er nodig is.',
   },
   {
-    q: 'In welke regio werken jullie?',
-    a: `We zijn gevestigd in ${company.city} en werken in een straal van ongeveer ${company.radiusKm} km — onder andere in Amstelveen, Haarlem, Zaandam, Almere en Utrecht.`,
+    q: 'Werken jullie met een vaste offerte?',
+    a: 'Ja. Na het bespreken van de werkzaamheden ontvangt u een duidelijke offerte waarin de werkzaamheden en bijbehorende kosten overzichtelijk worden vermeld. Zo weet u vooraf waar u aan toe bent.',
   },
   {
-    q: 'Doen jullie ook kleine klussen?',
-    a: 'Zeker. Van een lekkende kraan tot een complete woningrenovatie: geen klus is te klein.',
+    q: 'Komen jullie eerst langs om de situatie te bekijken?',
+    a: 'Ja. Bij vrijwel alle werkzaamheden is een beoordeling op locatie nodig, dus komen we eerst bij u langs. We bekijken de situatie, bespreken uw wensen en stellen daarna een passende offerte op.',
   },
   {
-    q: 'Hoe snel kunnen jullie beginnen?',
-    a: 'Dat hangt af van de omvang en onze planning. Kleine klussen kunnen vaak binnen enkele weken; bij de offerte geven we altijd een realistische startdatum.',
+    q: 'Hoe lang duurt een renovatie?',
+    a: 'De doorlooptijd verschilt per project. Een badkamer, keuken of kleine verbouwing heeft uiteraard een andere planning dan een complete woningrenovatie. Na de opname geven we u een duidelijke inschatting van de werkzaamheden en de planning. Vaak kunnen wij op korte termijn starten.',
   },
   {
-    q: 'Ruimen jullie zelf op na afloop?',
-    a: 'Ja. We laten de werkplek elke dag netjes achter en voeren afval en sloopmateriaal zelf af.',
+    q: 'Kan ik tijdens de renovatie nog wijzigingen doorgeven?',
+    a: 'In veel gevallen is dat mogelijk. We bespreken eventuele wijzigingen vooraf, zodat duidelijk is wat de gevolgen zijn voor de werkzaamheden, planning en kosten.',
+  },
+  {
+    q: 'Regelen jullie ook materialen?',
+    a: 'Ja. In overleg verzorgen wij de benodigde bouwmaterialen en andere materialen voor het project. Uiteraard kunnen we ook werken met materialen die u zelf heeft uitgekozen.',
+  },
+  {
+    q: 'Werken jullie met vaste vakmensen?',
+    a: 'Wij werken met ervaren vakmensen en zorgen ervoor dat de werkzaamheden professioneel en volgens afspraak worden uitgevoerd.',
+  },
+  {
+    q: 'Ruimen jullie de bouwplaats na afloop op?',
+    a: 'Ja. We zorgen ervoor dat de werkplek tijdens het project zo verzorgd mogelijk blijft en dat bouw- en sloopafval na afloop volgens afspraak wordt afgevoerd.',
+  },
+  {
+    q: 'Kan ik vrijblijvend een offerte aanvragen?',
+    a: 'Ja. Neem contact met ons op en vertel ons kort wat u wilt laten verbouwen of renoveren. We bespreken vervolgens de mogelijkheden en de volgende stap.',
   },
 ];

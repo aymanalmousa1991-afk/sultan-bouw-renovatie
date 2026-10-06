@@ -36,10 +36,10 @@ const channels = [
         <div data-reveal class="mt-10 grid gap-8 rounded-3xl bg-sand/70 p-8 sm:grid-cols-2">
           <div>
             <p class="flex items-center gap-2 font-semibold"><MapPin class="size-4 text-gold-deep" aria-hidden="true" />Vestiging</p>
-            <p class="mt-2 text-muted">{company.city}<br />Werkgebied tot {company.radiusKm} km</p>
+            <p class="mt-2 text-muted">{company.city}<br />Actief in {company.region}</p>
           </div>
           <div>
-            <p class="flex items-center gap-2 font-semibold"><Clock class="size-4 text-gold-deep" aria-hidden="true" />Openingstijden</p>
+            <p class="flex items-center gap-2 font-semibold"><Clock class="size-4 text-gold-deep" aria-hidden="true" />Bereikbaarheid</p>
             <ul class="mt-2 text-muted">
               {company.hours.map((h) => <li>{h.days}: {h.time}</li>)}
             </ul>

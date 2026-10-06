@@ -1,12 +1,12 @@
 ---
-import { Plus } from '@lucide/astro';
+import { Plus, ArrowRight } from '@lucide/astro';
 import { faqs, company } from '../../data/site';
 ---
 <section class="py-24 md:py-36">
   <div class="container-x grid gap-14 lg:grid-cols-12">
     <div class="lg:col-span-4">
       <p class="eyebrow" data-reveal>Veelgestelde vragen</p>
-      <h2 data-split class="mt-5 text-[clamp(2.2rem,4.6vw,4rem)] font-bold">Goed om te weten.</h2>
+      <h2 data-split class="mt-5 text-[clamp(2.2rem,4.6vw,4rem)] font-bold">Alles wat u wilt weten vóór de start.</h2>
       <p data-reveal class="mt-6 text-lg text-muted">
         Staat uw vraag er niet bij? Bel ons op <a href={company.phoneHref} class="font-semibold text-ink underline decoration-gold decoration-2 underline-offset-4">{company.phone}</a>.
       </p>
@@ -23,6 +23,13 @@ import { faqs, company } from '../../data/site';
           <p class="max-w-2xl pb-8 pr-16 text-lg text-muted">{f.a}</p>
         </details>
       ))}
+      <div data-reveal class="mt-12 flex flex-col gap-6 rounded-3xl bg-night p-8 text-bone sm:flex-row sm:items-center sm:justify-between sm:p-10">
+        <div>
+          <p class="font-display text-2xl font-semibold">Klaar om uw plannen te bespreken?</p>
+          <p class="mt-2 max-w-md text-bone/70">Van een badkamer- of keukenrenovatie tot een complete verbouwing: wij denken met u mee van het eerste idee tot de oplevering.</p>
+        </div>
+        <a href="/contact/" class="btn btn-primary shrink-0">Plan een kennismaking <ArrowRight class="size-4" aria-hidden="true" /></a>
+      </div>
     </div>
   </div>
 </section>

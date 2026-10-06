@@ -7,10 +7,11 @@ import ownerPhoto from '../../assets/eigenaar.jpg';
 const ownerName = company.owner;
 
 const values = [
-  'Eén vast aanspreekpunt, van offerte tot oplevering',
-  'Heldere prijs vooraf, geen verrassingen',
-  'Elke dag een schone, opgeruimde werkplek',
-  'Netjes, op tijd en met respect voor uw huis',
+  'Vakkundig uitgevoerd, van eerste schets tot oplevering',
+  'Eén vast aanspreekpunt gedurende het hele project',
+  'Duidelijke afspraken en transparante offertes',
+  'Kwaliteit in materiaal, afwerking en uitvoering',
+  'Renovatie met oog voor detail en duurzaamheid',
 ];
 ---
 <section id="over" class="relative py-24 md:py-36">
@@ -47,7 +48,7 @@ const values = [
           Of het nu gaat om één wand of een complete woning: we werken zorgvuldig, communiceren duidelijk en leveren pas op als u tevreden bent.
         </p>
       </div>
-      <ul class="mt-10 grid gap-4 sm:grid-cols-2">
+      <ul class="mt-10 grid gap-4">
         {values.map((v) => (
           <li data-reveal class="flex gap-3">
             <span class="mt-0.5 grid size-6 shrink-0 place-items-center rounded-full bg-gold/15 text-gold-deep"><Check class="size-4" stroke-width={2.5} aria-hidden="true" /></span>

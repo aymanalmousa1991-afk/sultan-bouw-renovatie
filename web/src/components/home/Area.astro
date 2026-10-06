@@ -2,58 +2,67 @@
 import { MapPin } from '@lucide/astro';
 import { company, areas } from '../../data/site';
 
-// Posities t.o.v. Amsterdam (centrum 280,280; 4px = 1 km)
-const cities = [
-  { name: 'Amstelveen', x: 268, y: 310 }, { name: 'Haarlem', x: 208, y: 274 },
-  { name: 'Zaandam', x: 260, y: 248 }, { name: 'Almere', x: 364, y: 280 },
-  { name: 'Hoofddorp', x: 222, y: 310 }, { name: 'Purmerend', x: 292, y: 221 },
-  { name: 'Hilversum', x: 356, y: 344 }, { name: 'Utrecht', x: 339, y: 403 },
-  { name: 'Leiden', x: 168, y: 372 }, { name: 'Alkmaar', x: 238, y: 164 },
-  { name: 'Lelystad', x: 434, y: 212 }, { name: 'Weesp', x: 316, y: 304 },
-];
-const labelled = new Set(['Haarlem', 'Almere', 'Utrecht', 'Leiden', 'Alkmaar', 'Lelystad', 'Hilversum', 'Purmerend']);
+// Echte coördinaten; omgerekend naar de kaart rond Amsterdam (centrum 280,280)
+const AMS = { lat: 52.3676, lon: 4.9041 };
+const coords: Record<string, [number, number]> = {
+  Amstelveen: [52.3008, 4.8639], Diemen: [52.3394, 4.9626], Zaandam: [52.442, 4.8292],
+  Haarlem: [52.3874, 4.6462], Hoofddorp: [52.3061, 4.6907], Almere: [52.3508, 5.2647],
+  Purmerend: [52.505, 4.9597], Hilversum: [52.2292, 5.1669], Utrecht: [52.0907, 5.1214],
+  Leiden: [52.1601, 4.497], Alkmaar: [52.6324, 4.7534], Lelystad: [52.5185, 5.4714],
+  Weesp: [52.3076, 5.0419], Uithoorn: [52.2375, 4.825], Aalsmeer: [52.2617, 4.7625],
+  Hoorn: [52.6424, 5.0597], Volendam: [52.495, 5.07], Beverwijk: [52.4836, 4.6563],
+  IJmuiden: [52.4583, 4.6194], Zandvoort: [52.3713, 4.5333], Bussum: [52.2735, 5.161],
+  Huizen: [52.299, 5.242], Mijdrecht: [52.2067, 4.8625], Heerhugowaard: [52.664, 4.83],
+  Castricum: [52.548, 4.669], Lisse: [52.259, 4.557], Maarssen: [52.136, 5.04],
+};
+const toXY = ([lat, lon]: [number, number]) => ({
+  x: 280 + (lon - AMS.lon) * 68 * 5.2,
+  y: 280 - (lat - AMS.lat) * 111 * 5.2,
+});
+const labelled = new Set(['Haarlem', 'Almere', 'Utrecht', 'Leiden', 'Alkmaar', 'Lelystad', 'Hilversum', 'Purmerend', 'Hoorn', 'Zaandam']);
+const dots = Object.entries(coords).map(([name, c]) => ({ name, ...toXY(c) }));
 ---
 <section class="on-dark relative overflow-hidden bg-ink py-24 text-bone md:py-36">
   <div class="container-x grid grid-cols-1 items-center gap-16 lg:grid-cols-2">
     <div>
       <p class="eyebrow" data-reveal>Werkgebied</p>
-      <h2 data-split class="mt-5 text-[clamp(2.2rem,4.6vw,4rem)] font-bold">Gevestigd in {company.city}. Actief tot {company.radiusKm}&nbsp;km daarbuiten.</h2>
+      <h2 data-split class="mt-5 text-[clamp(2.2rem,4.6vw,4rem)] font-bold">Gevestigd in {company.city}. Actief in de hele regio.</h2>
       <p data-reveal class="mt-6 max-w-lg text-lg text-bone/70">
-        We komen graag bij u langs voor een gratis opname. Twijfelt u of uw woonplaats binnen ons werkgebied valt? Bel of app ons gerust.
+        We komen graag vrijblijvend bij u langs. Staat uw woonplaats er niet tussen? Bel of app ons gerust, dan kijken we wat er mogelijk is.
       </p>
-      <ul data-reveal class="mt-10 flex flex-wrap gap-2">
+      <ul data-reveal class="mt-10 flex flex-wrap gap-1.5" aria-label="Plaatsen waar wij werken">
         {areas.map((a) => (
-          <li class="inline-flex items-center gap-1.5 rounded-full border border-white/15 px-3.5 py-1.5 text-sm text-bone/80">
-            <MapPin class="size-3.5 text-gold-light" aria-hidden="true" />{a}
+          <li class="inline-flex items-center gap-1 rounded-full border border-white/12 px-2.5 py-1 text-[0.8rem] text-bone/75">
+            <MapPin class="size-3 text-gold-light" aria-hidden="true" />{a}
           </li>
         ))}
       </ul>
     </div>
 
     <div data-reveal class="relative mx-auto w-full max-w-[34rem]">
-      <svg viewBox="0 0 560 560" class="h-auto w-full" role="img" aria-label={`Kaart van het werkgebied: ${company.radiusKm} km rond ${company.city}`}>
-        <g fill="none" stroke="#f4f1ea">
-          <circle cx="280" cy="280" r="240" stroke-opacity=".18" stroke-dasharray="4 8" />
-          <circle cx="280" cy="280" r="160" stroke-opacity=".14" />
-          <circle cx="280" cy="280" r="80" stroke-opacity=".12" />
+      <svg viewBox="0 0 560 560" class="h-auto w-full" role="img" aria-label={`Kaart van het werkgebied rond ${company.city}`}>
+        <defs>
+          <radialGradient id="area-glow">
+            <stop offset="0" stop-color="#b58849" stop-opacity=".22" />
+            <stop offset="1" stop-color="#b58849" stop-opacity="0" />
+          </radialGradient>
+        </defs>
+        <circle cx="280" cy="280" r="270" fill="url(#area-glow)" />
+        <g fill="none" stroke="#f4f1ea" stroke-opacity=".1">
+          <circle cx="280" cy="280" r="90" />
+          <circle cx="280" cy="280" r="180" />
+          <circle cx="280" cy="280" r="265" stroke-dasharray="3 7" />
         </g>
-        <circle cx="280" cy="280" r="240" fill="#b58849" fill-opacity=".06" />
-        <g fill="#f4f1ea" fill-opacity=".4" font-family="Manrope Variable, sans-serif" font-size="11" font-weight="700" letter-spacing="1">
-          <text x="280" y="196" text-anchor="middle">20 KM</text>
-          <text x="280" y="116" text-anchor="middle">40 KM</text>
-          <text x="280" y="36" text-anchor="middle">60 KM</text>
-        </g>
-        {cities.map((c) => (
+        {dots.map((c) => (
           <g>
-            <circle cx={c.x} cy={c.y} r="4.5" fill="#d4a865" />
+            <circle cx={c.x} cy={c.y} r={labelled.has(c.name) ? 4.5 : 3} fill="#d4a865" fill-opacity={labelled.has(c.name) ? 1 : 0.7} />
             {labelled.has(c.name) && (
-              <text x={c.x + 9} y={c.y + 4} fill="#f4f1ea" fill-opacity=".75" font-family="Manrope Variable, sans-serif" font-size="13" font-weight="600">{c.name}</text>
+              <text x={c.x < 280 ? c.x - 8 : c.x + 8} y={c.y + 4} text-anchor={c.x < 280 ? 'end' : 'start'} fill="#f4f1ea" fill-opacity=".75" font-family="Manrope Variable, sans-serif" font-size="13" font-weight="600">{c.name}</text>
             )}
           </g>
         ))}
-        <circle cx="280" cy="280" r="10" fill="#b58849" class="pulse" />
-        <circle cx="280" cy="280" r="10" fill="#b58849" />
-        <g transform="translate(280 234)">
+        <circle cx="280" cy="280" r="12" fill="#b58849" class="pulse" />
+        <g transform="translate(280 280)">
           <rect x="-62" y="-17" width="124" height="34" rx="17" fill="#b58849" />
           <text y="6" text-anchor="middle" fill="#1c1a18" font-family="Bricolage Grotesque Variable, sans-serif" font-size="17" font-weight="700">{company.city}</text>
         </g>
