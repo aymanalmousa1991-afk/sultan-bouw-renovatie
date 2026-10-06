@@ -53,6 +53,17 @@ app.use(morgan(isProd ? 'combined' : 'dev'));
 app.use(express.json({ limit: '100kb' }));
 app.use(express.urlencoded({ extended: true, limit: '100kb' }));
 
+// ─── Eén vast adres ─────────────────────────────────────
+// Met CANONICAL_HOST (bijv. sultan-bouw.nl) gaan www- en .fly.dev-bezoekers permanent
+// naar het hoofddomein. De API blijft op elk adres werken (o.a. health checks en oude reviewlinks).
+const canonicalHost = process.env.CANONICAL_HOST;
+if (canonicalHost) {
+  app.use((req, res, next) => {
+    if (req.path.startsWith('/api') || req.hostname === canonicalHost) return next();
+    res.redirect(301, `https://${canonicalHost}${req.originalUrl}`);
+  });
+}
+
 // ─── API ────────────────────────────────────────────────
 app.use('/api', formRoutes);
 app.use('/api/reviews', reviewRoutes);
