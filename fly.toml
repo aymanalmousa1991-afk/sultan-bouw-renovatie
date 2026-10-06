@@ -1,12 +1,28 @@
-# fly.toml voor Sultan Bouw & Renovatie Backend
+# fly.toml voor Sultan Bouw & Renovatie (website + API)
 app = "sultan-bouw-renovatie"
-primary_region = "fra"
+primary_region = "ams"
+
+[env]
+  NODE_ENV = "production"
+  PUBLIC_URL = "https://sultan-bouw-renovatie.fly.dev"
 
 [http_service]
   internal_port = 3000
   force_https = true
   auto_stop_machines = false
-  auto_start_machines = false
+  auto_start_machines = true
   min_machines_running = 1
 
-# Geen add-ons (geen Postgres, geen Tigris — we gebruiken MongoDB Atlas)
+  [[http_service.checks]]
+    grace_period = "15s"
+    interval = "30s"
+    method = "GET"
+    path = "/api/health"
+    timeout = "5s"
+
+[[vm]]
+  memory = "512mb"
+  cpu_kind = "shared"
+  cpus = 1
+
+# Geheimen (MONGODB_URI, SMTP_*, NOTIFICATION_EMAIL, REVIEW_SECRET) staan in `fly secrets`
