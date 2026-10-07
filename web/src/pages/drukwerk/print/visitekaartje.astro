@@ -1,5 +1,5 @@
 ---
-import { Phone, Mail, MapPin, AtSign } from '@lucide/astro';
+import { Phone, Mail, MapPin, AtSign, Globe } from '@lucide/astro';
 import Print from '../../../layouts/Print.astro';
 import LogoStacked from '../../../assets/brand/logo-light.svg';
 import Mark from '../../../assets/brand/mark-dark.svg';
@@ -32,6 +32,7 @@ const insta = '@' + company.socials.instagram.replace(/\/$/, '').split('/').pop(
         <ul class="mt-[4mm] space-y-[1.5mm] text-[6.8pt] leading-tight">
           <li class="flex items-center gap-[1.8mm]"><Phone class="size-[2.8mm] shrink-0 text-gold-deep" stroke-width={2.2} /><b>{company.phone}</b></li>
           <li class="flex items-center gap-[1.8mm]"><Mail class="size-[2.8mm] shrink-0 text-gold-deep" stroke-width={2.2} />{company.email}</li>
+          <li class="flex items-center gap-[1.8mm]"><Globe class="size-[2.8mm] shrink-0 text-gold-deep" stroke-width={2.2} /><b>{company.website}</b></li>
           <li class="flex items-center gap-[1.8mm]"><AtSign class="size-[2.8mm] shrink-0 text-gold-deep" stroke-width={2.2} />{insta}</li>
           <li class="flex items-center gap-[1.8mm]"><MapPin class="size-[2.8mm] shrink-0 text-gold-deep" stroke-width={2.2} />{company.region}</li>
         </ul>

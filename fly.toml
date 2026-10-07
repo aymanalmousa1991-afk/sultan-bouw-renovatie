@@ -4,7 +4,10 @@ primary_region = "ams"
 
 [env]
   NODE_ENV = "production"
-  PUBLIC_URL = "https://sultan-bouw-renovatie.fly.dev"
+  PUBLIC_URL = "https://sultan-bouw.nl"
+  # www.sultan-bouw.nl en sultan-bouw-renovatie.fly.dev sturen door naar dit adres
+  CANONICAL_HOST = "sultan-bouw.nl"
+  MAIL_FROM = "info@sultan-bouw.nl"
 
 [http_service]
   internal_port = 3000

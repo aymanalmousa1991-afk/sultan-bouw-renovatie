@@ -1,6 +1,6 @@
 ---
 import { Image } from 'astro:assets';
-import { Check, Phone, Mail, AtSign, MapPin, Clock, BadgeCheck, UserRound, Sparkles } from '@lucide/astro';
+import { Check, Phone, Mail, AtSign, MapPin, Globe, Clock, BadgeCheck, UserRound, Sparkles } from '@lucide/astro';
 import Print from '../../../layouts/Print.astro';
 import LogoHorizontal from '../../../assets/brand/logo-horizontal-light.svg';
 import LogoDark from '../../../assets/brand/logo-horizontal-dark.svg';
@@ -51,7 +51,7 @@ const photos = [p1, p2, p3, p4];
       <div class="mt-auto flex items-center gap-[5mm] rounded-[4mm] bg-night px-[6mm] py-[5mm] text-bone">
         <div class="flex-1">
           <p class="font-display text-[14pt] font-bold leading-tight">Vrijblijvende offerte &amp; opname</p>
-          <p class="mt-[1mm] text-[7.5pt] text-bone/75">Bel of app ons — reactie binnen 24 uur.</p>
+          <p class="mt-[1mm] text-[7.5pt] text-bone/75">Bel, app of kijk op <b class="text-bone">{company.website}</b> — reactie binnen 24 uur.</p>
           <p class="mt-[2.5mm] flex items-center gap-[2mm] font-display text-[17pt] font-bold text-gold-light">
             <Phone class="size-[5mm]" stroke-width={2.2} />{company.phone}
           </p>
@@ -112,6 +112,7 @@ const photos = [p1, p2, p3, p4];
         <ul class="mt-[2.5mm] space-y-[1.1mm] text-[7.4pt] leading-tight">
           <li class="flex items-center gap-[1.8mm]"><Phone class="size-[3mm] text-gold-deep" stroke-width={2.2} /><b>{company.phone}</b></li>
           <li class="flex items-center gap-[1.8mm]"><Mail class="size-[3mm] text-gold-deep" stroke-width={2.2} />{company.email}</li>
+          <li class="flex items-center gap-[1.8mm]"><Globe class="size-[3mm] text-gold-deep" stroke-width={2.2} /><b>{company.website}</b></li>
           <li class="flex items-center gap-[1.8mm]"><AtSign class="size-[3mm] text-gold-deep" stroke-width={2.2} />{insta} · Facebook · TikTok</li>
           <li class="flex items-center gap-[1.8mm]"><MapPin class="size-[3mm] text-gold-deep" stroke-width={2.2} />{company.region} · KvK {company.kvk}</li>
         </ul>

@@ -4,7 +4,7 @@ import sitemap from '@astrojs/sitemap';
 
 // Het adres van de live website. Zodra er een eigen domein is: SITE_URL instellen
 // (bijv. in de Dockerfile/fly.toml) of hier aanpassen, en opnieuw bouwen.
-const SITE = process.env.SITE_URL || 'https://sultan-bouw-renovatie.fly.dev';
+const SITE = process.env.SITE_URL || 'https://sultan-bouw.nl';
 
 export default defineConfig({
   site: SITE,
